@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="../../../Library/Android/sdk/platforms/android-32/data/res/drawable-watch/sym_def_app_icon.xml" value="0.15" />
+        <entry key="app/src/main/res/drawable/ic_baseline_remove_red_eye_24.xml" value="0.204" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.15" />
+        <entry key="app/src/main/res/drawable/ic_splash.xml" value="0.15" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_17" project-jdk-name="11" project-jdk-type="JavaSDK" />
+</project>

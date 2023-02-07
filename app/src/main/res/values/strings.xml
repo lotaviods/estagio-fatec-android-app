@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Fatec estágios</string>
+    <string name="password_text_field">Senha:</string>
+    <string name="user_text_field">Usuario:</string>
+    <string name="register_label">Registrar</string>
+    <string name="login_button">Login</string>
+    <string name="login_credenciais_incorretas">Credenciais incorretas</string>
+    <string name="digite_nome_usuario">Digite seu nome de usuário</string>
+    <string name="digite_sua_senha">Digite sua senha</string>
+    <string name="user">usuario:</string>
+    <string name="password">senha:</string>
+    <string name="generic_error_message">Ops.. aconteceu algum problema, tente novamente mais tarde</string>
+    <string name="perfil">Perfil</string>
+    <string name="vagas_de_estagio">Vagas de estágio</string>
+    <string name="vagas">Vagas</string>
+    <string name="vagas_aplicadas">Vagas aplicadas</string>
+    <string name="notificacoes">Notificações</string>
+    <string name="my_profile">Meu perfil</string>
+    <string name="user_pref_resolver">USER_PREF</string>
+</resources>
