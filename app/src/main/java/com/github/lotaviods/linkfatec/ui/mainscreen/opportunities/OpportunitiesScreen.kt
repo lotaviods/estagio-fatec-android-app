@@ -158,9 +158,10 @@ private fun BodyText(modifier: Modifier = Modifier, text: String?) {
     val customLinkifyTextView = remember {
         TextView(context)
     }
+
     AndroidView(modifier = modifier, factory = { customLinkifyTextView }) { textView ->
         textView.text = text ?: ""
-        textView.setTextColor(R.color.black)
+        textView.setTextColor(context.resources.getColor(R.color.black, context.theme))
         LinkifyCompat.addLinks(textView, Linkify.WEB_URLS)
         textView.movementMethod = LinkMovementMethod.getInstance()
     }
