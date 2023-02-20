@@ -35,60 +35,61 @@ import org.koin.androidx.compose.inject
 fun MainScreen(navController: NavHostController) {
     val userRepository: UserRepository by inject()
 
-    Scaffold(topBar = {
-        TopAppBar(backgroundColor = ThemeColor.Red, content = {
-            Row {
+    Scaffold(
+        topBar = {
+            TopAppBar(backgroundColor = ThemeColor.Red, content = {
+                Row {
 
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxHeight()) {
-                    Text(
-                        style = TextStyle.Default.copy(
-                            fontSize = 20.sp
-                        ),
-                        text = "Fatec estágios", color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .selectable(selected = false,
-                            indication = rememberRipple(
-                                bounded = false,
-                                color = LocalContentColor.current
+                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxHeight()) {
+                        Text(
+                            style = TextStyle.Default.copy(
+                                fontSize = 20.sp
                             ),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = {
-                                navController.navigate(
-                                    "profile/${
-                                        userRepository
-                                            .getUser()
-                                            .toJson()
-                                    }"
-                                )
-                            })
+                            text = "Fatec estágios", color = Color.White,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.PhotoCamera,
-                        contentDescription = stringResource(
-                            R.string.perfil
-                        ),
-                        tint = Color.White
-                    )
-                    Text(
-                        text = stringResource(
-                            R.string.perfil
-                        ), color = Color.White
-                    )
+                    Spacer(modifier = Modifier.weight(1f))
+
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .padding(5.dp)
+                            .selectable(selected = false,
+                                indication = rememberRipple(
+                                    bounded = false,
+                                    color = LocalContentColor.current
+                                ),
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClick = {
+                                    navController.navigate(
+                                        "profile/${
+                                            userRepository
+                                                .getUser()
+                                                .toJson()
+                                        }"
+                                    )
+                                })
+
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.PhotoCamera,
+                            contentDescription = stringResource(
+                                R.string.perfil
+                            ),
+                            tint = Color.White
+                        )
+                        Text(
+                            text = stringResource(
+                                R.string.perfil
+                            ), color = Color.White
+                        )
+                    }
+
                 }
-
-            }
-        })
-    }) { paddingValues ->
+            })
+        }) { paddingValues ->
         MainScreen(Modifier.padding(paddingValues))
     }
 }

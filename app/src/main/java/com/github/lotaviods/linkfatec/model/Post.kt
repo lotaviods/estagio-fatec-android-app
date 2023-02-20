@@ -7,5 +7,6 @@ data class Post(
     val role: String,
     val description: String,
     val promotionalImageUrl: String?,
-    val likeCount: Int
+    var likeCount: Int,
+    val liked: Boolean = false
 )

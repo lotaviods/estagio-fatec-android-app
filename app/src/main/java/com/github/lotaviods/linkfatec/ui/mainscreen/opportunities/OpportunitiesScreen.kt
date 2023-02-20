@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -30,9 +31,11 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.text.util.LinkifyCompat
@@ -40,39 +43,35 @@ import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.model.Post
-import kotlinx.coroutines.delay
+import com.github.lotaviods.linkfatec.ui.mainscreen.opportunities.viewmodel.OpportunitiesViewModel
+import com.github.lotaviods.linkfatec.ui.mainscreen.opportunities.viewmodel.OpportunitiesViewModel.UiState
+import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OpportunitiesScreen() {
+fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinViewModel()) {
     val refreshScope = rememberCoroutineScope()
-    var refreshing by remember { mutableStateOf(false) }
-    var itemCount by remember { mutableStateOf(1) }
+    val state = opportunitiesViewModel.uiState.collectAsState()
+
+    val isRefreshing = state.value is UiState.Loading
 
     fun refresh() = refreshScope.launch {
-        refreshing = true
-        delay(1500)
-        itemCount += 1
-        refreshing = false
+        opportunitiesViewModel.getAvailableJobs()
     }
 
-    val state = rememberPullRefreshState(refreshing, ::refresh)
+    val refreshState = rememberPullRefreshState(isRefreshing, ::refresh)
 
-    Box(Modifier.pullRefresh(state)) {
+    Box(Modifier.pullRefresh(refreshState)) {
 
         LazyColumn(Modifier.fillMaxSize()) {
-            if (!refreshing) {
-                items(itemCount) {
+            val posts = (state.value as? UiState.Loaded)?.posts
+
+            if (posts != null) {
+                items(posts.size) { pos ->
                     JobPost(
-                        Post(
-                            1,
-                            "Paschoalotto ",
-                            "https://s3.amazonaws.com/gupy5/production/companies/27592/career/66043/images/2022-05-20_17-46_logo.jpg",
-                            "Mobile developer",
-                            "Emprego: Paschoalotto realiza seleção presencial em Garça nesta segunda e terça \nveja: https://www.garcaemfoco.com.br/noticia/15432/emprego-paschoalotto-realiza-selecao-presencial-em-garca-nesta-segunda-e-terca",
-                            "https://www.garcaemfoco.com.br/images/noticias/15432/d319db928671ff29b3f436d07d68ab73.jpeg",
-                            5
-                        )
+                        posts[pos],
+                        opportunitiesViewModel
                     )
                 }
             }
@@ -92,8 +91,8 @@ fun OpportunitiesScreen() {
             .offset(y = height - (height.times(0.1f)))
         ) {
             PullRefreshIndicator(
-                refreshing,
-                state
+                isRefreshing,
+                refreshState
             )
         }
 
@@ -101,19 +100,19 @@ fun OpportunitiesScreen() {
 }
 
 @Composable
-fun JobPost(post: Post) {
+fun JobPost(post: Post, opportunitiesViewModel: OpportunitiesViewModel) {
     Row {
         CompanyProfilePicture(post)
-        JobPostCard(post)
+        JobPostCard(post, opportunitiesViewModel)
     }
 }
 
 @Composable
-fun JobPostCard(post: Post) {
+fun JobPostCard(post: Post, opportunitiesViewModel: OpportunitiesViewModel) {
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
 
     Card(Modifier.padding(10.dp)) {
-        Column(Modifier.padding(start = 10.dp)) {
+        Column(Modifier.padding(start = 10.dp, end = 10.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(post.companyName, modifier = Modifier.padding(start = 5.dp))
                 Text(" - ")
@@ -147,7 +146,7 @@ fun JobPostCard(post: Post) {
             if (post.promotionalImageUrl != null)
                 PromotionalImage(post.promotionalImageUrl)
 
-            StatusPostSection(post.likeCount)
+            StatusPostSection(post, opportunitiesViewModel)
         }
     }
 }
@@ -184,53 +183,116 @@ fun CompanyProfilePicture(post: Post) {
 }
 
 @Composable
-fun StatusPostSection(likeCount: Int) {
-    val ripple = rememberRipple(bounded = false, color = Color.Red)
-    var selected: Boolean by remember { mutableStateOf(false) }
-    var updatedLikeCount: Int by remember { mutableStateOf(likeCount) }
+fun StatusPostSection(post: Post, opportunitiesViewModel: OpportunitiesViewModel) {
+    Column {
+        var updatedLikeCount: Int by remember { mutableStateOf(post.likeCount) }
 
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.padding(bottom = 10.dp)
-    ) {
-        Text(updatedLikeCount.toString(), textAlign = TextAlign.Center)
+        Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+            LikeCounter(updatedLikeCount)
+        }
+
+        Divider(modifier = Modifier.padding(top = 10.dp), color = Color.LightGray)
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(2.dp)
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.padding(bottom = 10.dp, start = 2.dp)
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_like),
-                contentDescription = "like",
-                tint = if (selected) Color.Red else Color.LightGray,
-                modifier = Modifier
-                    .height(30.dp)
-                    .width(30.dp)
-                    .selectable(
-                        selected = selected,
-                        indication = ripple,
-                        interactionSource = remember {
-                            MutableInteractionSource()
-                        }) {
-                        selected = !selected
+            LikeButton(Modifier.padding(top = 5.dp), post.liked) { liked ->
+                opportunitiesViewModel.updateLikeCount(post, liked)
+                if (liked)
+                    updatedLikeCount++
+                else updatedLikeCount--
+            }
 
-                        if (selected) {
-                            updatedLikeCount = likeCount + 1
-                            return@selectable
-                        }
+            Spacer(modifier = Modifier.weight(1f))
 
-                        updatedLikeCount = likeCount
-                    }
-            )
-
-            Text(text = "Like")
+            ApplyJobButton {
+                opportunitiesViewModel.applyJob(post)
+            }
         }
     }
 }
+@Composable
+private fun ApplyJobButton(callback: () -> Unit) {
+    Button(
+        modifier = Modifier
+            .padding(
+                top = 10.dp,
+                end = 10.dp
+            ),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = ThemeColor.Red
+        ),
+        onClick = { callback() }
+    ) {
+        Text(
+            text = ("Aplicar vaga"),
+            style = TextStyle.Default.copy(
+                color = Color.White,
+                fontSize = TextUnit(15F, TextUnitType.Sp)
+            )
+        )
+    }
+}
+@Composable
+private fun LikeCounter(currentLikeCount: Int) {
+    Image(
+        modifier = Modifier
+            .height(25.dp)
+            .width(25.dp),
+        painter = painterResource(id = R.drawable.like_icon),
+        contentDescription = null
+    )
+    Text(
+        currentLikeCount.toString(),
+        textAlign = TextAlign.Center,
+        fontSize = TextUnit(15F, TextUnitType.Sp)
+    )
+}
+
+@Composable
+private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: Boolean) -> Unit) {
+    val ripple = rememberRipple(bounded = false, color = Color.Red)
+    var selected: Boolean by remember { mutableStateOf(liked) }
+
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Outlined.ThumbUp,
+            contentDescription = "like",
+            tint = if (selected) Color.Red else Color.LightGray,
+            modifier = Modifier
+                .height(20.dp)
+                .width(20.dp)
+                .selectable(
+                    selected = selected,
+                    indication = ripple,
+                    interactionSource = remember {
+                        MutableInteractionSource()
+                    }) {
+                    selected = !selected
+                    callback(selected)
+                }
+        )
+
+        Text(
+            text = "Like",
+            style = TextStyle.Default.copy(
+                color = Color.LightGray,
+                fontSize = TextUnit(15F, TextUnitType.Sp)
+            )
+        )
+    }
+}
+
 
 @Composable
 fun PromotionalImage(url: String, modifier: Modifier = Modifier) {
-    Card(modifier = modifier.padding(10.dp)) {
+    Box(modifier = modifier.padding(10.dp)) {
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
@@ -241,20 +303,4 @@ fun PromotionalImage(url: String, modifier: Modifier = Modifier) {
         )
     }
 
-}
-
-@Preview
-@Composable
-fun JobPostPreview() {
-    JobPost(
-        Post(
-            1,
-            "Paschoalotto ",
-            "https://s3.amazonaws.com/gupy5/production/companies/27592/career/66043/images/2022-05-20_17-46_logo.jpg",
-            "Mobile developer",
-            "Emprego: Paschoalotto realiza seleção presencial em Garça nesta segunda e terça \nveja: https://www.garcaemfoco.com.br/noticia/15432/emprego-paschoalotto-realiza-selecao-presencial-em-garca-nesta-segunda-e-terca",
-            "https://www.garcaemfoco.com.br/images/noticias/15432/d319db928671ff29b3f436d07d68ab73.jpeg",
-            5
-        )
-    )
 }

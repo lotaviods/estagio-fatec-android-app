@@ -10,6 +10,7 @@ object AppModules {
         mModules.apply {
             addAll(loginModules)
             addAll(mainModules)
+            addAll(opportunitiesModule)
         }
     }
 }
