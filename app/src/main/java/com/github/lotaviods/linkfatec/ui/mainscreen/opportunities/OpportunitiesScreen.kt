@@ -257,7 +257,15 @@ private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: 
     var selected: Boolean by remember { mutableStateOf(liked) }
 
     Row(
-        modifier = modifier,
+        modifier = modifier.selectable(
+            selected = selected,
+            indication = ripple,
+            interactionSource = remember {
+                MutableInteractionSource()
+            }) {
+            selected = !selected
+            callback(selected)
+        },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
@@ -268,15 +276,6 @@ private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: 
             modifier = Modifier
                 .height(20.dp)
                 .width(20.dp)
-                .selectable(
-                    selected = selected,
-                    indication = ripple,
-                    interactionSource = remember {
-                        MutableInteractionSource()
-                    }) {
-                    selected = !selected
-                    callback(selected)
-                }
         )
 
         Text(
