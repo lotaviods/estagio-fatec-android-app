@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.github.lotaviods.linkfatec.ui.mainscreen.navigation
+package com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource

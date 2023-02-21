@@ -19,12 +19,10 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.github.lotaviods.linkfatec.R
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
 import com.github.lotaviods.linkfatec.ui.components.login.LoginForm
 import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel
 import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel.LoginUiState
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
-import org.koin.androidx.compose.inject
 
 @Composable
 fun LoginScreen(viewModel: LoginScreenViewModel, onSuccess: () -> Unit) {
@@ -57,21 +55,27 @@ private fun LoginScreenContent(
     scaffoldState: ScaffoldState,
     viewModel: LoginScreenViewModel
 ) {
-    val userRepository: UserRepository by inject()
     val context = LocalContext.current
     val state = viewModel.uiState.collectAsState(initial = LoginUiState.Initial)
 
     if (state.value is LoginUiState.Error) {
-        LaunchedEffect(viewModel.uiState.value) {
+        LaunchedEffect(state) {
             scaffoldState.snackbarHostState.showSnackbar(
                 context.getString(R.string.generic_error_message)
             )
         }
     }
 
+    if (state.value is LoginUiState.Declined) {
+        LaunchedEffect(state) {
+            scaffoldState.snackbarHostState.showSnackbar(
+                context.getString(R.string.login_invalid)
+            )
+        }
+    }
+
     if (state.value is LoginUiState.Success) {
-        LaunchedEffect(viewModel.uiState.value) {
-            userRepository.saveUser((state.value as LoginUiState.Success).profile)
+        LaunchedEffect(state) {
             onSuccess()
         }
     }

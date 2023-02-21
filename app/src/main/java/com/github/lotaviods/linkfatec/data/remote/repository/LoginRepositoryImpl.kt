@@ -1,4 +1,4 @@
-package com.github.lotaviods.linkfatec.data.remote
+package com.github.lotaviods.linkfatec.data.remote.repository
 
 import com.github.lotaviods.linkfatec.data.repository.LoginRepository
 import com.github.lotaviods.linkfatec.model.LoginState

@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 
-package com.github.lotaviods.linkfatec.ui.mainscreen.opportunities
+package com.github.lotaviods.linkfatec.ui.modules.opportunities
 
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
@@ -42,9 +43,11 @@ import androidx.core.text.util.LinkifyCompat
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.model.Post
-import com.github.lotaviods.linkfatec.ui.mainscreen.opportunities.viewmodel.OpportunitiesViewModel
-import com.github.lotaviods.linkfatec.ui.mainscreen.opportunities.viewmodel.OpportunitiesViewModel.UiState
+import com.github.lotaviods.linkfatec.ui.components.nointernet.NoInternet
+import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
+import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel.UiState
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -53,19 +56,28 @@ import org.koin.androidx.compose.koinViewModel
 fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinViewModel()) {
     val refreshScope = rememberCoroutineScope()
     val state = opportunitiesViewModel.uiState.collectAsState()
-
     val isRefreshing = state.value is UiState.Loading
 
     fun refresh() = refreshScope.launch {
         opportunitiesViewModel.getAvailableJobs()
     }
 
+    val error = (state.value as? UiState.Error)?.error
+
+    if (error is ErrorState.InternetConnection) {
+        NoInternet()
+    }
+
     val refreshState = rememberPullRefreshState(isRefreshing, ::refresh)
 
     Box(Modifier.pullRefresh(refreshState)) {
+        val posts = (state.value as? UiState.Loaded)?.posts
+
+        if (posts?.isEmpty() == true) {
+            NoPostsFound()
+        }
 
         LazyColumn(Modifier.fillMaxSize()) {
-            val posts = (state.value as? UiState.Loaded)?.posts
 
             if (posts != null) {
                 items(posts.size) { pos ->
@@ -96,6 +108,27 @@ fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinVie
             )
         }
 
+    }
+}
+
+@Composable
+private fun NoPostsFound() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.no_opportunities_found),
+            contentDescription = null
+        )
+        Text(
+            textAlign = TextAlign.Center,
+            text = stringResource(R.string.no_opportunities_found),
+            style = TextStyle.Default.copy(
+                fontSize = TextUnit(22.0F, TextUnitType.Sp),
+                color = Color.Gray
+            )
+        )
     }
 }
 
@@ -213,6 +246,7 @@ fun StatusPostSection(post: Post, opportunitiesViewModel: OpportunitiesViewModel
         }
     }
 }
+
 @Composable
 private fun ApplyJobButton(callback: () -> Unit) {
     Button(
@@ -235,6 +269,7 @@ private fun ApplyJobButton(callback: () -> Unit) {
         )
     }
 }
+
 @Composable
 private fun LikeCounter(currentLikeCount: Int) {
     Image(
@@ -301,5 +336,4 @@ fun PromotionalImage(url: String, modifier: Modifier = Modifier) {
             contentScale = ContentScale.Fit
         )
     }
-
 }

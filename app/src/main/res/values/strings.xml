@@ -17,4 +17,6 @@
     <string name="notificacoes">Notificações</string>
     <string name="my_profile">Meu perfil</string>
     <string name="user_pref_resolver">USER_PREF</string>
+    <string name="login_invalid">Login ou senha incorretos, tente novamente</string>
+    <string name="no_opportunities_found">Nenhuma vaga encontrada até agora,\n tente procurar mais tarde</string>
 </resources>

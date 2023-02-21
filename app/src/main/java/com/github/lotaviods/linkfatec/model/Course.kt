@@ -1,3 +1,3 @@
 package com.github.lotaviods.linkfatec.model
 
-data class Course(val name: String)
+data class Course(val id: Int, val name: String)

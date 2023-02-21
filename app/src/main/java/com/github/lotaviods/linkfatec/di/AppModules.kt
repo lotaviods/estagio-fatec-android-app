@@ -10,7 +10,10 @@ object AppModules {
         mModules.apply {
             addAll(loginModules)
             addAll(mainModules)
+            addAll(httpModules)
             addAll(opportunitiesModule)
+            addAll(profileModules)
+            addAll(fakeLoginModules)
         }
     }
 }

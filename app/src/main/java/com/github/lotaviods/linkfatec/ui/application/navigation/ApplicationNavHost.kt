@@ -16,8 +16,8 @@ import androidx.navigation.navArgument
 import com.github.lotaviods.linkfatec.model.User.Companion.fromJson
 import com.github.lotaviods.linkfatec.ui.login.LoginScreen
 import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel
-import com.github.lotaviods.linkfatec.ui.mainscreen.MainScreen
-import com.github.lotaviods.linkfatec.ui.profile.ProfileScreen
+import com.github.lotaviods.linkfatec.ui.modules.mainscreen.MainScreen
+import com.github.lotaviods.linkfatec.ui.modules.profile.ProfileScreen
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import org.koin.androidx.compose.koinViewModel
 

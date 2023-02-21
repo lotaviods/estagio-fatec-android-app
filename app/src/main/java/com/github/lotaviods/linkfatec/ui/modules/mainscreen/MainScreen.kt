@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalFoundationApi::class)
 
-package com.github.lotaviods.linkfatec.ui.mainscreen
+package com.github.lotaviods.linkfatec.ui.modules.mainscreen
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -26,8 +26,8 @@ import androidx.navigation.NavHostController
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.data.repository.UserRepository
 import com.github.lotaviods.linkfatec.model.User.Companion.toJson
-import com.github.lotaviods.linkfatec.ui.mainscreen.navigation.MainPager
-import com.github.lotaviods.linkfatec.ui.mainscreen.navigation.MainPagerNavigator
+import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPager
+import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPagerNavigator
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import org.koin.androidx.compose.inject
 

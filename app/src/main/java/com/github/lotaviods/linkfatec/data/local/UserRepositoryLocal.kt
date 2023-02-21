@@ -8,7 +8,7 @@ import com.github.lotaviods.linkfatec.data.repository.UserRepository
 import com.github.lotaviods.linkfatec.model.Course
 import com.github.lotaviods.linkfatec.model.User
 
-class UserRepositoryImpl(activity: Application) : UserRepository {
+class UserRepositoryLocal(activity: Application) : UserRepository {
 
     private val sharedPref: SharedPreferences = activity.getSharedPreferences(
         activity.getString(R.string.user_pref_resolver),
@@ -17,7 +17,15 @@ class UserRepositoryImpl(activity: Application) : UserRepository {
 
 
     override fun getUser(): User {
-        val course = Course(sharedPref.getString("course_name", "null") ?: "null")
+        val id = sharedPref.getInt("course_id", -1)
+
+        val name = sharedPref.getString(
+            "course_name",
+            "null"
+        ) ?: "null"
+
+        val course = Course(id, name)
+
         return User(
             sharedPref.getInt("user_id", -1),
             sharedPref.getString("user_name", "null") ?: "null",
@@ -31,6 +39,7 @@ class UserRepositoryImpl(activity: Application) : UserRepository {
 
         editor.putInt("user_id", user.id)
         editor.putString("user_name", user.name)
+        editor.putInt("course_id", user.course.id)
         editor.putString("course_name", user.course.name)
         editor.putString("user_ra", user.ra)
 
