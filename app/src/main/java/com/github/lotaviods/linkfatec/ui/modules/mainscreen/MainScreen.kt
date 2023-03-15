@@ -9,19 +9,19 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.data.repository.UserRepository
@@ -38,62 +38,12 @@ fun MainScreen(navController: NavHostController) {
     Scaffold(
         topBar = {
             TopAppBar(backgroundColor = ThemeColor.Red, content = {
-                Row {
-
-                    Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxHeight()) {
-                        Text(
-                            style = TextStyle.Default.copy(
-                                fontSize = 20.sp
-                            ),
-                            text = "Fatec estágios", color = Color.White,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .padding(5.dp)
-                            .selectable(selected = false,
-                                indication = rememberRipple(
-                                    bounded = false,
-                                    color = LocalContentColor.current
-                                ),
-                                interactionSource = remember { MutableInteractionSource() },
-                                onClick = {
-                                    navController.navigate(
-                                        "profile/${
-                                            userRepository
-                                                .getUser()
-                                                .toJson()
-                                        }"
-                                    )
-                                })
-
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.PhotoCamera,
-                            contentDescription = stringResource(
-                                R.string.perfil
-                            ),
-                            tint = Color.White
-                        )
-                        Text(
-                            text = stringResource(
-                                R.string.perfil
-                            ), color = Color.White
-                        )
-                    }
-
-                }
+                AppBarContent(navController, userRepository)
             })
         }) { paddingValues ->
         MainScreen(Modifier.padding(paddingValues))
     }
 }
-
 
 @Composable
 internal fun MainScreen(modifier: Modifier) {
@@ -111,6 +61,79 @@ internal fun MainScreen(modifier: Modifier) {
         ) {
             MainPager(it)
         }
+    }
+}
+
+@Composable
+private fun AppBarContent(navController: NavHostController, userRepository: UserRepository) {
+    Row {
+
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(start = 5.dp)
+        ) {
+            Text(
+                style = TextStyle.Default.copy(
+                    fontSize = 20.sp
+                ),
+                text = "Fatec estágios", color = Color.White,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        ProfilePictureButton(
+            modifier = Modifier
+                .padding(5.dp)
+                .selectable(
+                    selected = false,
+                    indication = rememberRipple(
+                        bounded = false,
+                        color = LocalContentColor.current
+                    ),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        navController.navigate(
+                            "profile/${
+                                userRepository
+                                    .getUser()
+                                    .toJson()
+                            }"
+                        )
+                    },
+                )
+        )
+    }
+}
+
+@Composable
+private fun ProfilePictureButton(modifier: Modifier) {
+    ConstraintLayout(modifier) {
+        val (icon, text) = createRefs()
+
+        Icon(
+            modifier = Modifier
+                .size(25.dp)
+                .constrainAs(icon) {
+                    bottom.linkTo(text.top)
+                },
+            painter = painterResource(id = R.drawable.profile),
+            contentDescription = stringResource(
+                R.string.perfil
+            ),
+            tint = Color.White
+        )
+        Text(
+            modifier = Modifier.constrainAs(text) {
+                bottom.linkTo(parent.bottom)
+            },
+            text = stringResource(
+                R.string.perfil
+            ), color = Color.White
+        )
     }
 }
 
