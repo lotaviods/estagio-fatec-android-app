@@ -16,9 +16,11 @@ abstract class BaseWebClient {
                 SocketTimeoutException::class.java.name -> {
                     ApplicationResponse(null, Status.CONNECTION_ERROR)
                 }
+
                 UnknownHostException::class.java.name -> {
                     ApplicationResponse(null, Status.CONNECTION_ERROR)
                 }
+
                 else -> {
                     ApplicationResponse(null, Status.UNDETERMINED)
                 }
@@ -29,6 +31,10 @@ abstract class BaseWebClient {
                 ApplicationResponse(response.body(), Status.SUCCESS)
             }
 
+            BAD_REQUEST -> {
+                ApplicationResponse(status = Status.BAD_REQUEST)
+            }
+
             else -> {
                 ApplicationResponse(null, Status.UNDETERMINED)
             }
@@ -37,5 +43,6 @@ abstract class BaseWebClient {
 
     companion object {
         val SUCCESS = 200..300
+        val BAD_REQUEST = 400
     }
 }
