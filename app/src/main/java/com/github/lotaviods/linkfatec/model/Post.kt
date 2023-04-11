@@ -8,5 +8,7 @@ data class Post(
     val description: String,
     val promotionalImageUrl: String?,
     var likeCount: Int,
-    val liked: Boolean = false
+    val liked: Boolean = false,
+    var subscribedCount: Int,
+    var subscribed: Boolean = false
 )

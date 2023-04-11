@@ -2,7 +2,7 @@ package com.github.lotaviods.linkfatec.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 
-data class JobOffer (
+data class JobOffer(
     val id: Int,
     val description: String,
     @SerializedName("job_experience")
@@ -21,5 +21,7 @@ data class JobOffer (
     @SerializedName("like_count")
     val likeCount: Int,
     @SerializedName("liked_by")
-    val likedBy: List<Int>
+    val likedBy: List<Int>,
+    @SerializedName("subscribed_by")
+    val subscribedBy: List<Int>
 )

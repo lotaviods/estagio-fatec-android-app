@@ -1,5 +1,6 @@
 package com.github.lotaviods.linkfatec.ui.components.loading
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -9,13 +10,16 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoadingText(loading: Boolean) {
+fun LoadingText(loading: Boolean, text: String, textStyle: TextStyle? = null) {
+
     if (loading)
         LoadingCircle()
     else
+
         Text(
-            text = "Login", style = TextStyle.Default.copy(
+            text = text, style = textStyle ?: TextStyle.Default.copy(
                 color = Color.White
-            ), modifier = Modifier.padding(5.dp)
+            )
         )
+
 }

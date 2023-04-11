@@ -28,4 +28,8 @@ class JobOfferWebClient : BaseWebClient(), KoinComponent {
     suspend fun subscribeJob(jobId: Int, studentId: Int): ApplicationResponse<ResponseBody> {
         return execute { service.subscribeJob(jobId, studentId) }
     }
+
+    suspend fun unSubscribeJob(jobId: Int, studentId: Int): ApplicationResponse<ResponseBody> {
+        return execute { service.unSubscribeJob(jobId, studentId) }
+    }
 }

@@ -76,4 +76,27 @@ class JobOfferRepositoryImpl(
             )
         }
     }
+
+    override suspend fun unSubscribeJob(jobId: Int, studentId: Int): AppResource<Any> {
+        try {
+            val response = webClient.unSubscribeJob(jobId, studentId)
+
+            if (response.isSuccessful) {
+                return AppResource(null, false)
+            }
+            return AppResource(
+                null,
+                true,
+                ErrorState.Unexpected
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            return AppResource(
+                null,
+                true,
+                ErrorState.Unexpected
+            )
+        }
+    }
 }

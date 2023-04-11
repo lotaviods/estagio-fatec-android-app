@@ -128,7 +128,7 @@ fun LoginForm(
             modifier = Modifier.padding(top = 10.dp),
             shape = RoundedCornerShape(8.dp)
         ) {
-            LoadingText(loading)
+            LoadingText(loading, "Login")
         }
     }
 }

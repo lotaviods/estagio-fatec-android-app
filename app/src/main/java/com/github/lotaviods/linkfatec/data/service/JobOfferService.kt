@@ -28,4 +28,10 @@ interface JobOfferService {
         @Field("student_id") studentId: Int
     ): Response<ResponseBody>
 
+    @POST("student/job-offer/unsubscribe")
+    @FormUrlEncoded
+    suspend fun unSubscribeJob(
+        @Field("job_id") jobId: Int,
+        @Field("student_id") studentId: Int
+    ): Response<ResponseBody>
 }

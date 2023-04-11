@@ -8,10 +8,11 @@ import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.model.Post
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.Collections
 
 class OpportunitiesViewModel(
     private val repository: JobOfferRepository,
@@ -23,6 +24,9 @@ class OpportunitiesViewModel(
     private val mUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = mUiState
 
+    private val mUiMessages: MutableSharedFlow<UiMessages> = MutableSharedFlow()
+    val uiMessages: SharedFlow<UiMessages> = mUiMessages
+
     init {
         getAvailableJobs()
     }
@@ -33,7 +37,7 @@ class OpportunitiesViewModel(
         val student = userRepository.getUser()
         val resp = repository.getAllAvailableJobOffers(student.course.id)
 
-        resp.error?.let {error ->
+        resp.error?.let { error ->
             mUiState.emit(UiState.Error(error))
             return@launch
         }
@@ -47,53 +51,96 @@ class OpportunitiesViewModel(
                 it.description,
                 it.promotionalImageUrl,
                 it.likeCount,
-                it.likedBy.contains(student.id)
+                it.likedBy.contains(student.id),
+                it.appliedStudentsCount,
+                it.subscribedBy.contains(student.id)
             )
 
         }
-        posts?.let { mUiState.emit(UiState.Loaded(it)) } ?: mUiState.emit(UiState.Loaded(listOf()))
+
+        if (posts?.isEmpty() == true) {
+            mUiState.emit(UiState.NoPostsFound)
+            return@launch
+        }
+
+        posts?.let { mUiState.emit(UiState.Loaded(it)) } ?: mUiState.emit(UiState.NoPostsFound)
 
     }
 
     fun updateLikeCount(post: Post, liked: Boolean) = viewModelScope.launch {
         likeJob?.cancel()
-        updateScreenState(post, liked)
 
         likeJob = viewModelScope.launch {
             delay(500)
             val student = userRepository.getUser()
             repository.likeJob(post.id, student.id, liked)
+        }
+    }
 
+    fun showModalSubscribeJob(posts: List<Post>, position: Int) = viewModelScope.launch {
+        val post = posts.getOrNull(position) ?: return@launch
+
+        mUiState.emit(UiState.ShowSubscribeModal(posts, post))
+    }
+
+    fun closeModalSubscribeJob() = viewModelScope.launch {
+        val state = (mUiState.value as? UiState.Loaded) ?: return@launch
+
+        mUiState.emit(UiState.Loaded(state.posts))
+    }
+
+    fun applyToJobOffer(post: Post) = viewModelScope.launch {
+        val resp = repository.subscribeJob(post.id, userRepository.getUser().id)
+
+        mUiMessages.emit(UiMessages.HasFinishedToAppliedToJob)
+        if (!resp.hasError) {
+            updateUiForAppliedJobOffer(post, true)
         }
 
     }
 
-    private suspend fun updateScreenState(post: Post, liked: Boolean) {
-        val state = (mUiState.value as? UiState.Loaded)?.copy() ?: return
+    fun unSubscribeJob(post: Post) = viewModelScope.launch {
+        repository.unSubscribeJob(post.id, userRepository.getUser().id)
 
-        val selectedPost = state.posts.find { p -> p.id == post.id } ?: return
-        val newLikeCount = if (liked) selectedPost.likeCount + 1 else selectedPost.likeCount - 1
-        val newPost = selectedPost.copy(likeCount = newLikeCount, liked = liked)
-
-        Collections.replaceAll(state.posts, selectedPost, newPost)
-
-        mUiState.emit(state)
+        updateUiForAppliedJobOffer(post, false)
     }
 
-    fun applyJob(post: Post) = viewModelScope.launch {
-        // TODO: Make loading button animation, maybe need to change this
-        // TODO: Make user feedback when apply job
-        val student = userRepository.getUser()
-        repository.subscribeJob(post.id, student.id)
-    }
+    private suspend fun updateUiForAppliedJobOffer(post: Post, apply: Boolean) {
+        val state = (mUiState.value as? UiState.Loaded) ?: return
 
+        val list = mutableListOf<Post>().apply { addAll(state.posts) }
+        val newPost = list.find { p -> p.id == post.id }
+        val index = list.indexOf(post)
+
+        list.remove(post)
+        newPost?.subscribed = apply
+
+        if (newPost?.subscribedCount != null) {
+            if (apply) newPost.subscribedCount += 1
+            else newPost.subscribedCount -= 1
+        }
+
+        if (newPost != null) {
+            list.add(index, post)
+        }
+
+        mUiState.emit(UiState.Loaded(list))
+    }
 
     sealed interface UiState {
         object Loading : UiState
-        data class Loaded(
-            val posts: List<Post>
+        open class Loaded(
+            open val posts: List<Post>
         ) : UiState
 
+        object NoPostsFound : UiState
+        data class ShowSubscribeModal(override val posts: List<Post>, val post: Post) :
+            Loaded(posts)
+
         data class Error(val error: ErrorState) : UiState
+    }
+
+    sealed interface UiMessages {
+        object HasFinishedToAppliedToJob : UiMessages
     }
 }

@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.AppliedOffersScreen
 import com.github.lotaviods.linkfatec.ui.modules.opportunities.OpportunitiesScreen
+import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -23,7 +26,9 @@ fun MainPager(
     ) {
         when (page) {
             0 -> {
-                OpportunitiesScreen()
+                val viewModel: OpportunitiesViewModel = koinViewModel()
+
+                OpportunitiesScreen(viewModel)
             }
             1 -> {
                 AppliedOffersScreen()
