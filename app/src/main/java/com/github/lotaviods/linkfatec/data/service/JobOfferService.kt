@@ -10,10 +10,10 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface JobOfferService {
-    @GET("job-offers/available/course/{course_id}")
+    @GET("v1/job-offers/available/course/{course_id}")
     suspend fun getAllAvailableJobs(@Path("course_id") courseId: Int): Response<List<JobOffer>>
 
-    @POST("job-offer/{id}/like")
+    @POST("v1/job-offer/{id}/like")
     @FormUrlEncoded
     suspend fun likeJob(
         @Path("id") jobId: Int,
@@ -21,14 +21,14 @@ interface JobOfferService {
         @Field("like") shouldLike: Boolean
     ): Response<ResponseBody>
 
-    @POST("student/job-offer/subscribe")
+    @POST("v1/student/job-offer/subscribe")
     @FormUrlEncoded
     suspend fun subscribeJob(
         @Field("job_id") jobId: Int,
         @Field("student_id") studentId: Int
     ): Response<ResponseBody>
 
-    @POST("student/job-offer/unsubscribe")
+    @POST("v1/student/job-offer/unsubscribe")
     @FormUrlEncoded
     suspend fun unSubscribeJob(
         @Field("job_id") jobId: Int,

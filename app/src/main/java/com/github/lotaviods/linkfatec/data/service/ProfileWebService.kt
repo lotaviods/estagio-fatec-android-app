@@ -10,14 +10,14 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface ProfileWebService {
-    @POST("mobile/student/resume")
+    @POST("v1/mobile/student/resume")
     @Multipart
     suspend fun sendProfileResume(
         @Part("student_id") studentId: Int,
         @Part file: MultipartBody.Part,
     ): Response<ResponseBody>
 
-    @POST("mobile/student/profile_picture")
+    @POST("v1/mobile/student/profile_picture")
     @Multipart
     suspend fun sendProfilePicture(
         @Part("student_id") studentId: Int,
