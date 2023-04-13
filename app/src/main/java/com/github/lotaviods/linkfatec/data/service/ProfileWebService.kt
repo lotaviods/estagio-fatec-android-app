@@ -16,4 +16,12 @@ interface ProfileWebService {
         @Part("student_id") studentId: Int,
         @Part file: MultipartBody.Part,
     ): Response<ResponseBody>
+
+    @POST("mobile/student/profile_picture")
+    @Multipart
+    suspend fun sendProfilePicture(
+        @Part("student_id") studentId: Int,
+        @Part file: MultipartBody.Part,
+    ): Response<ResponseBody>
+
 }

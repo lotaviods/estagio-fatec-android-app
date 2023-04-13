@@ -97,11 +97,7 @@ private fun AppBarContent(navController: NavHostController, userRepository: User
                     interactionSource = remember { MutableInteractionSource() },
                     onClick = {
                         navController.navigate(
-                            "profile/${
-                                userRepository
-                                    .getUser()
-                                    .toJson()
-                            }"
+                            "profile/"
                         )
                     },
                 )

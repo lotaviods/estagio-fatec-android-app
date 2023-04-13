@@ -6,7 +6,8 @@ data class User(
     val id: Int,
     val name: String,
     val course: Course,
-    val ra: String
+    val ra: String,
+    val profilePicture: String? = null
 ) {
     companion object {
         fun String.fromJson(): User {

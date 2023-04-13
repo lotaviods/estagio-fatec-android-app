@@ -28,4 +28,14 @@ class ProfileWebClient : BaseWebClient(), KoinComponent {
         return execute { service.sendProfileResume(studentId, filePart) }
     }
 
+    suspend fun sendProfilePicture(studentId: Int, bytes: ByteArray?): ApplicationResponse<ResponseBody> {
+        val requestFile = bytes?.let {
+            it.toRequestBody("application/pdf".toMediaTypeOrNull(), 0, it.size)
+        } ?: return ApplicationResponse(status = Status.UNDETERMINED)
+
+        val filePart = MultipartBody.Part.createFormData("file", "file.pdf", requestFile)
+
+        return execute { service.sendProfilePicture(studentId, filePart) }
+    }
+
 }

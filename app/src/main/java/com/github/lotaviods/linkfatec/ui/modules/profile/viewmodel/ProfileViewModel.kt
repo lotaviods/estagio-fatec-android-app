@@ -35,6 +35,22 @@ class ProfileViewModel(
         }
     }
 
+    fun sendProfilePicture(bytes: ByteArray?) = viewModelScope.launch{
+        withContext(Dispatchers.IO) {
+            val resp = profileRepository.sendProfilePicture(userRepository.getUser().id, bytes)
+
+            if (resp.hasError) {
+                mUiState.emit(UiState.Error)
+                return@withContext
+            }
+            mUiState.emit(UiState.Success)
+        }
+    }
+
+    fun getUser(): User {
+        return userRepository.getUser()
+    }
+
     sealed interface UiState {
         object Success : UiState
 

@@ -12,7 +12,9 @@ data class StudentData(
     val id: Int,
     val name: String,
     val course: Course,
-    val ra: String
+    val ra: String,
+    @SerializedName("profile_picture")
+    val profilePicture: String? = null
 )
 
 data class TokenData(

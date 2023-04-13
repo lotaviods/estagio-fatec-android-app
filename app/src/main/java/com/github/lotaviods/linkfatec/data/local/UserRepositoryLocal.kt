@@ -30,7 +30,8 @@ class UserRepositoryLocal(activity: Application) : UserRepository {
             sharedPref.getInt("user_id", -1),
             sharedPref.getString("user_name", "null") ?: "null",
             course,
-            sharedPref.getString("user_ra", "null") ?: "null"
+            sharedPref.getString("user_ra", "null") ?: "null",
+            profilePicture = sharedPref.getString("profile_picture", null)
         )
     }
 
@@ -42,6 +43,7 @@ class UserRepositoryLocal(activity: Application) : UserRepository {
         editor.putInt("course_id", user.course.id)
         editor.putString("course_name", user.course.name)
         editor.putString("user_ra", user.ra)
+        editor.putString("profile_picture", user.profilePicture)
 
         editor.apply()
     }

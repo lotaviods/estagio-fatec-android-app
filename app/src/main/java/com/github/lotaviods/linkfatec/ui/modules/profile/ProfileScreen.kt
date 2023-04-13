@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,13 +28,11 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.icons.outlined.Camera
-import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,8 +45,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
-import com.github.lotaviods.linkfatec.model.User
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel.*
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
@@ -59,14 +60,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun ProfileScreen(
     modifier: Modifier = Modifier,
-    user: User?,
     navController: NavHostController,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
+    val user = viewModel.getUser()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val filePicker =
+    val resumeFilePicker =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
@@ -77,13 +78,24 @@ fun ProfileScreen(
             }
         }
 
+    val profilePicturePicker =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            coroutineScope.launch {
+                withContext(Dispatchers.IO) {
+                    if (uri != null) {
+                        sendProfilePicture(context, uri, viewModel)
+                    }
+                }
+            }
+        }
+
     LaunchedEffect(viewModel.uiState) {
         viewModel.uiState.collectLatest {
             if (it is UiState.Error) {
-                Toast.makeText(context, "Ocorreu algum erro ao enviar o currículo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Ocorreu algum erro ao enviar as informações", Toast.LENGTH_SHORT).show()
             }
             if(it is UiState.Success) {
-                Toast.makeText(context, "Currículo enviado com sucesso", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Enviado com sucesso", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -120,21 +132,62 @@ fun ProfileScreen(
                         .padding(5.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.profile_placeholder),
-                        contentDescription = "PROFILE",
+                    Box(
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .size(150.dp)
                             .padding(5.dp)
-                            .clip(CircleShape)
-                            .fillMaxWidth(),
-                        contentScale = ContentScale.Crop
-                    )
+                            .clickable {
+                                profilePicturePicker.launch(
+                                    arrayOf(
+                                        "image/png",
+                                        "image/jpeg",
+                                        "image/gif"
+                                    )
+                                )
+                            }
+                    ) {
+                        // TODO: Make request to update profile picture
+                        var painter: AsyncImagePainter? = null
+
+                        if(user.profilePicture != null)
+                            painter = rememberAsyncImagePainter(model = user.profilePicture)
+
+                        Image(
+                            painter = painter ?: painterResource(id = R.drawable.profile_placeholder),
+                            contentDescription = "PROFILE",
+                            modifier = Modifier
+                                .size(150.dp)
+                                .padding(5.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                        Box(
+                            modifier = Modifier
+                                .size(35.dp)
+                                .align(Alignment.BottomEnd)
+                                .background(Color.White, CircleShape)
+                                .clip(CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.CameraAlt,
+                                contentDescription = "Change photo",
+                                modifier = Modifier
+                                    .align(Alignment.Center)
+                                    .clickable(onClick = { profilePicturePicker.launch(
+                                        arrayOf(
+                                            "image/png",
+                                            "image/jpeg",
+                                            "image/gif"
+                                        )
+                                    ) })
+                            )
+                        }
+                    }
                     Row {
                         Text(text = "Nome:")
                         Text(
-                            text = user?.name ?: "",
+                            text = user.name,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .weight(1f)
@@ -144,7 +197,7 @@ fun ProfileScreen(
                     Row {
                         Text(text = "Turma:")
                         Text(
-                            text = user?.course?.name ?: "",
+                            text = user.course.name,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .weight(1f)
@@ -168,7 +221,7 @@ fun ProfileScreen(
                         }
                         Button(
                             onClick = {
-                                filePicker.launch(arrayOf("application/pdf"))
+                                resumeFilePicker.launch(arrayOf("application/pdf"))
                             }, colors = ButtonDefaults.buttonColors(
                                 backgroundColor = ThemeColor.Red
                             )
@@ -188,6 +241,19 @@ fun ProfileScreen(
             }
         }
 
+    }
+}
+
+fun sendProfilePicture(context: Context, uri: Uri, viewModel: ProfileViewModel) {
+    val inputStream = context.contentResolver.openInputStream(uri)
+    try {
+        val bytes = inputStream?.readBytes()
+
+        viewModel.sendProfilePicture(bytes)
+    } catch (e: Exception) {
+        Log.e(TAG, "sendProfileResume: ", e)
+    } finally {
+        inputStream?.close()
     }
 }
 

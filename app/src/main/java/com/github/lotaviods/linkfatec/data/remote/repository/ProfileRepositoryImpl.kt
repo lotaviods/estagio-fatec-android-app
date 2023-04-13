@@ -28,4 +28,27 @@ class ProfileRepositoryImpl(private val webClient: ProfileWebClient) : ProfileRe
             )
         }
     }
+
+    override suspend fun sendProfilePicture(studentId: Int, bytes: ByteArray?): AppResource<Any> {
+        try {
+            val response = webClient.sendProfilePicture(studentId, bytes)
+
+            if (response.isSuccessful) {
+                return AppResource(null, false)
+            }
+            return AppResource(
+                null,
+                true,
+                ErrorState.Unexpected
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            return AppResource(
+                null,
+                true,
+                ErrorState.Unexpected
+            )
+        }
+    }
 }

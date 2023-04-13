@@ -37,15 +37,9 @@ fun ApplicationNavHost(navController: NavHostController, startDestination: Strin
         composable("main") {
             MainScreen(navController)
         }
-        composable("profile/{profile-arg}", arguments = listOf(
-            navArgument("profile-arg") {
-                type = NavType.StringType
-            }
-        )) {
-            val userJson = it.arguments?.getString("profile-arg")
-
+        composable("profile/") {
             ProfileScreen(
-                user = userJson?.fromJson(), navController = navController
+                navController = navController
             )
         }
         composable("loading") {
