@@ -1,6 +1,12 @@
 package com.github.lotaviods.linkfatec.ui.modules.profile
 
 import android.app.Activity
+import android.content.Context
+import android.net.Uri
+import android.util.Log
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,8 +26,14 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.Camera
+import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,16 +43,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.github.lotaviods.linkfatec.R
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
-import com.github.lotaviods.linkfatec.model.Course
 import com.github.lotaviods.linkfatec.model.User
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel
+import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel.*
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -50,6 +63,32 @@ fun ProfileScreen(
     navController: NavHostController,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    val filePicker =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+            coroutineScope.launch {
+                withContext(Dispatchers.IO) {
+                    if (uri != null) {
+                        sendProfileResume(context, uri, viewModel)
+                    }
+                }
+            }
+        }
+
+    LaunchedEffect(viewModel.uiState) {
+        viewModel.uiState.collectLatest {
+            if (it is UiState.Error) {
+                Toast.makeText(context, "Ocorreu algum erro ao enviar o currículo", Toast.LENGTH_SHORT).show()
+            }
+            if(it is UiState.Success) {
+                Toast.makeText(context, "Currículo enviado com sucesso", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(text = stringResource(R.string.my_profile), color = Color.White) },
@@ -113,9 +152,9 @@ fun ProfileScreen(
                         )
 
                     }
-                    Row {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                         Spacer(modifier = Modifier.weight(1f))
-                        // TODO: Add viewModel
+
                         Button(
                             onClick = {
                                 viewModel.logoutUser(user)
@@ -127,6 +166,22 @@ fun ProfileScreen(
                         ) {
                             Text(text = "Deslogar", color = Color.White)
                         }
+                        Button(
+                            onClick = {
+                                filePicker.launch(arrayOf("application/pdf"))
+                            }, colors = ButtonDefaults.buttonColors(
+                                backgroundColor = ThemeColor.Red
+                            )
+                        ) {
+                            Text(text = "Enviar currículo", color = Color.White)
+
+                            Icon(
+                                modifier = Modifier.padding(start = 10.dp),
+                                imageVector = Icons.Filled.Send,
+                                contentDescription = "Upload photo",
+                                tint = Color.White
+                            )
+                        }
                     }
 
                 }
@@ -136,31 +191,19 @@ fun ProfileScreen(
     }
 }
 
+suspend fun sendProfileResume(context: Context, uri: Uri, viewModel: ProfileViewModel) {
+    withContext(Dispatchers.IO) {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        try {
+            val pdfBytes = inputStream?.readBytes()
 
-// Preview
-@Composable
-@Preview
-private fun defaultPreview() {
-    ProfileScreen(
-        Modifier,
-        User(
-            1,
-            "Luiz Otávio da Silva Carvalho",
-            Course(1, "Analise e desenvolvimento de sistemas"),
-            "284913918568341"
-        ), rememberNavController(),
-        ProfileViewModel(object : UserRepository{
-            override fun getUser(): User {
-                TODO("Not yet implemented")
-            }
-
-            override fun saveUser(user: User) {
-                TODO("Not yet implemented")
-            }
-
-            override fun deleteUser(user: User) {
-                TODO("Not yet implemented")
-            }
-        })
-    )
+            viewModel.sendProfileResume(pdfBytes)
+        } catch (e: Exception) {
+            Log.e(TAG, "sendProfileResume: ", e)
+        } finally {
+            inputStream?.close()
+        }
+    }
 }
+
+private const val TAG = "ProfileScreen"
