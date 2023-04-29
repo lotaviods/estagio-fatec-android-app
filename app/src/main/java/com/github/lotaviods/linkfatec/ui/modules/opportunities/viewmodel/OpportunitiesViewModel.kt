@@ -2,8 +2,8 @@ package com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lotaviods.linkfatec.data.repository.JobOfferRepository
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.JobOfferRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.model.Post
 import kotlinx.coroutines.Job

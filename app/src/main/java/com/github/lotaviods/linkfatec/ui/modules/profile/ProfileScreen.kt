@@ -33,6 +33,7 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,6 +49,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.model.User
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel.*
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
@@ -63,7 +65,8 @@ fun ProfileScreen(
     navController: NavHostController,
     viewModel: ProfileViewModel = koinViewModel()
 ) {
-    val user = viewModel.getUser()
+    val state = viewModel.uiState.collectAsState()
+    val user: User = state.value.user
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -79,7 +82,7 @@ fun ProfileScreen(
         }
 
     val profilePicturePicker =
-        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri: Uri? ->
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
                     if (uri != null) {
@@ -89,12 +92,12 @@ fun ProfileScreen(
             }
         }
 
-    LaunchedEffect(viewModel.uiState) {
-        viewModel.uiState.collectLatest {
-            if (it is UiState.Error) {
+    LaunchedEffect(viewModel.uiEvent) {
+        viewModel.uiEvent.collectLatest {
+            if (it is UiEvent.Error) {
                 Toast.makeText(context, "Ocorreu algum erro ao enviar as informações", Toast.LENGTH_SHORT).show()
             }
-            if(it is UiState.Success) {
+            if(it is UiEvent.Success) {
                 Toast.makeText(context, "Enviado com sucesso", Toast.LENGTH_SHORT).show()
             }
         }
@@ -139,11 +142,7 @@ fun ProfileScreen(
                             .padding(5.dp)
                             .clickable {
                                 profilePicturePicker.launch(
-                                    arrayOf(
-                                        "image/png",
-                                        "image/jpeg",
-                                        "image/gif"
-                                    )
+                                    "image/*"
                                 )
                             }
                     ) {
@@ -174,13 +173,11 @@ fun ProfileScreen(
                                 contentDescription = "Change photo",
                                 modifier = Modifier
                                     .align(Alignment.Center)
-                                    .clickable(onClick = { profilePicturePicker.launch(
-                                        arrayOf(
-                                            "image/png",
-                                            "image/jpeg",
-                                            "image/gif"
+                                    .clickable(onClick = {
+                                        profilePicturePicker.launch(
+                                            "image/*"
                                         )
-                                    ) })
+                                    })
                             )
                         }
                     }

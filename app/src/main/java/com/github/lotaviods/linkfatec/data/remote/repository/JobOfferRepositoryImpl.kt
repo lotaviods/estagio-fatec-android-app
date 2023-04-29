@@ -2,7 +2,7 @@ package com.github.lotaviods.linkfatec.data.remote.repository
 
 import com.github.lotaviods.linkfatec.data.remote.model.JobOffer
 import com.github.lotaviods.linkfatec.data.remote.client.JobOfferWebClient
-import com.github.lotaviods.linkfatec.data.repository.JobOfferRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.JobOfferRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.resource.AppResource
 import org.koin.core.component.KoinComponent

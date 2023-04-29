@@ -1,7 +1,7 @@
 package com.github.lotaviods.linkfatec.data.remote.repository
 
 import com.github.lotaviods.linkfatec.data.remote.client.ProfileWebClient
-import com.github.lotaviods.linkfatec.data.repository.ProfileRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.ProfileRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.resource.AppResource
 

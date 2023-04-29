@@ -1,13 +1,12 @@
 package com.github.lotaviods.linkfatec.data.remote.client
 
+import com.github.lotaviods.linkfatec.data.remote.model.StudentUser
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse.*
 import com.github.lotaviods.linkfatec.data.retrofit.RetrofitClient
-import com.github.lotaviods.linkfatec.data.service.LoginService
 import com.github.lotaviods.linkfatec.data.service.ProfileWebService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.koin.core.component.KoinComponent
@@ -36,6 +35,10 @@ class ProfileWebClient : BaseWebClient(), KoinComponent {
         val filePart = MultipartBody.Part.createFormData("file", "file.pdf", requestFile)
 
         return execute { service.sendProfilePicture(studentId, filePart) }
+    }
+
+    suspend fun getUserProfile(studentId: Int): ApplicationResponse<StudentUser> {
+        return execute { service.getUserProfile(studentId) }
     }
 
 }

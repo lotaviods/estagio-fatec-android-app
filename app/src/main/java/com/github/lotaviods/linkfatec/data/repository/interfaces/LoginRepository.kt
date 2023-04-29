@@ -1,4 +1,4 @@
-package com.github.lotaviods.linkfatec.data.repository
+package com.github.lotaviods.linkfatec.data.repository.interfaces
 
 import com.github.lotaviods.linkfatec.model.LoginState
 

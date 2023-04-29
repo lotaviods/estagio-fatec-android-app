@@ -1,22 +1,23 @@
-package com.github.lotaviods.linkfatec.data.local
+package com.github.lotaviods.linkfatec.data.repository
 
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.github.lotaviods.linkfatec.R
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
+import com.github.lotaviods.linkfatec.data.remote.client.ProfileWebClient
+import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.Course
 import com.github.lotaviods.linkfatec.model.User
 
-class UserRepositoryLocal(activity: Application) : UserRepository {
+class UserRepositoryImpl(activity: Application, private val webClient: ProfileWebClient) :
+    UserRepository {
 
     private val sharedPref: SharedPreferences = activity.getSharedPreferences(
         activity.getString(R.string.user_pref_resolver),
         Context.MODE_PRIVATE
     )
 
-
-    override fun getUser(): User {
+    fun getCourse(): Course {
         val id = sharedPref.getInt("course_id", -1)
 
         val name = sharedPref.getString(
@@ -24,7 +25,10 @@ class UserRepositoryLocal(activity: Application) : UserRepository {
             "null"
         ) ?: "null"
 
-        val course = Course(id, name)
+        return Course(id, name)
+    }
+    override fun getUser(): User {
+        val course = getCourse()
 
         return User(
             sharedPref.getInt("user_id", -1),
@@ -46,6 +50,29 @@ class UserRepositoryLocal(activity: Application) : UserRepository {
         editor.putString("profile_picture", user.profilePicture)
 
         editor.apply()
+    }
+
+    override suspend fun getUpdatedUserInformation(): User {
+        val studentId = sharedPref.getInt("user_id", -1)
+        val resp = webClient.getUserProfile(studentId)
+
+        val user = getUser()
+
+        if (resp.data == null) return user
+
+        val newUser = user.copy(
+            profilePicture = resp.data.profilePicture,
+            name = resp.data.name,
+            course = resp.data.courseName?.let {
+                getCourse().copy(
+                    name = it
+                )
+            } ?: getCourse()
+        )
+
+        saveUser(newUser)
+
+        return newUser
     }
 
     override fun deleteUser(user: User) {

@@ -2,8 +2,8 @@ package com.github.lotaviods.linkfatec.ui.application.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.lotaviods.linkfatec.data.repository.LoginRepository
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.LoginRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.LoginState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

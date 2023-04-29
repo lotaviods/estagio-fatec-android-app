@@ -24,8 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.github.lotaviods.linkfatec.R
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
-import com.github.lotaviods.linkfatec.model.User.Companion.toJson
+import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPager
 import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPagerNavigator
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor

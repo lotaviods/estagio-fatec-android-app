@@ -1,11 +1,10 @@
 package com.github.lotaviods.linkfatec.data.remote.repository
 
 import com.github.lotaviods.linkfatec.data.remote.client.LoginWebClient
-import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse.Status
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse.Status.SUCCESS
-import com.github.lotaviods.linkfatec.data.repository.LoginRepository
-import com.github.lotaviods.linkfatec.data.repository.UserRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.LoginRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.Course
 import com.github.lotaviods.linkfatec.model.LoginState
 import com.github.lotaviods.linkfatec.model.User
