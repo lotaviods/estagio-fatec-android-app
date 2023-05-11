@@ -7,7 +7,7 @@
     <string name="login_credenciais_incorretas">Credenciais incorretas</string>
     <string name="digite_nome_usuario">Digite seu nome de usuário</string>
     <string name="digite_sua_senha">Digite sua senha</string>
-    <string name="user">usuario:</string>
+    <string name="email_">email:</string>
     <string name="password">senha:</string>
     <string name="generic_error_message">Ops.. aconteceu algum problema, tente novamente mais tarde</string>
     <string name="perfil">Perfil</string>
@@ -19,4 +19,5 @@
     <string name="user_pref_resolver">USER_PREF</string>
     <string name="login_invalid">Login ou senha incorretos, tente novamente</string>
     <string name="no_opportunities_found">Nenhuma vaga encontrada até agora,\n tente procurar mais tarde</string>
+    <string name="no_opportunities_applied">Nenhuma vaga aplicada,\n tente procurar algumas vagas disponíveis</string>
 </resources>

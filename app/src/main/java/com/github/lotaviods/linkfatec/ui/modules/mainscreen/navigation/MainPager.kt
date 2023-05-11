@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.AppliedOffersScreen
+import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.viewmodel.AppliedOffersViewModel
 import com.github.lotaviods.linkfatec.ui.modules.opportunities.OpportunitiesScreen
 import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
 import org.koin.androidx.compose.koinViewModel
@@ -31,7 +32,9 @@ fun MainPager(
                 OpportunitiesScreen(viewModel)
             }
             1 -> {
-                AppliedOffersScreen()
+                val viewModel: AppliedOffersViewModel = koinViewModel()
+
+                AppliedOffersScreen(viewModel)
             }
             2 -> {
                 Text("Hello AppliedOffers")

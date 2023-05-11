@@ -13,6 +13,9 @@ interface JobOfferService {
     @GET("v1/job-offers/available/course/{course_id}")
     suspend fun getAllAvailableJobs(@Path("course_id") courseId: Int): Response<List<JobOffer>>
 
+    @GET("v1/job-offers/{studentId}")
+    suspend fun getAppliedJobOffers(@Path("studentId") studentId: Int): Response<List<JobOffer>>
+
     @POST("v1/job-offer/{id}/like")
     @FormUrlEncoded
     suspend fun likeJob(

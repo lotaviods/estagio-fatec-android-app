@@ -1,5 +1,7 @@
 package com.github.lotaviods.linkfatec.data.remote.model
 
+import com.github.lotaviods.linkfatec.model.Post
+import com.github.lotaviods.linkfatec.model.User
 import com.google.gson.annotations.SerializedName
 
 data class JobOffer(
@@ -24,4 +26,21 @@ data class JobOffer(
     val likedBy: List<Int>,
     @SerializedName("subscribed_by")
     val subscribedBy: List<Int>
-)
+) {
+
+    fun toPost(user: User): Post {
+        return Post(
+            this.id,
+            this.companyName,
+            companyProfilePicture ?: "",
+            this.role ?: "",
+            this.description,
+            this.promotionalImageUrl,
+            this.likeCount,
+            this.likedBy.contains(user.id),
+            this.appliedStudentsCount,
+            this.subscribedBy.contains(user.id)
+        )
+    }
+
+}

@@ -32,6 +32,29 @@ class JobOfferRepositoryImpl(
         }
     }
 
+    override suspend fun getAppliedJobOffers(
+        studentId: Int
+    ): AppResource<List<JobOffer>> {
+        try {
+            val response = webClient.getAppliedJobOffers(studentId)
+
+            if (response.isSuccessful) {
+                return AppResource(response.data, false)
+            }
+            return AppResource(
+                null,
+                true,
+                ErrorState.InternetConnection
+            )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return AppResource(
+                null, true,
+                ErrorState.Unexpected
+            )
+        }
+    }
+
     override suspend fun likeJob(jobId: Int, studentId: Int, like: Boolean): AppResource<Any> {
         try {
             val response = webClient.likeJob(jobId, studentId, like)

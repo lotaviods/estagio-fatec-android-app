@@ -43,19 +43,7 @@ class OpportunitiesViewModel(
         }
 
         val posts = resp.data?.map {
-            Post(
-                it.id,
-                it.companyName,
-                it.companyProfilePicture ?: "",
-                it.role ?: "",
-                it.description,
-                it.promotionalImageUrl,
-                it.likeCount,
-                it.likedBy.contains(student.id),
-                it.appliedStudentsCount,
-                it.subscribedBy.contains(student.id)
-            )
-
+           it.toPost(student)
         }
 
         if (posts?.isEmpty() == true) {

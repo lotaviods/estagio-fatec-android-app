@@ -53,7 +53,7 @@ fun LoginForm(
 
         Column {
 
-            Text(text = stringResource(R.string.user).uppercase())
+            Text(text = stringResource(R.string.email_).uppercase())
 
             TextField(
                 value = userTextInput,
