@@ -7,6 +7,8 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.LocalContentAlpha
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
@@ -43,7 +45,7 @@ fun MainPagerNavigator(
                 Icon(
                     imageVector = Icons.Outlined.Work,
                     contentDescription = stringResource(R.string.vagas_de_estagio),
-                    tint = if (pagerState.currentPage == 0) Color.White else Color.DarkGray
+                    tint = if (pagerState.currentPage == 0) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             label = {
@@ -66,7 +68,7 @@ fun MainPagerNavigator(
                 Icon(
                     imageVector = Icons.Outlined.Bookmark,
                     contentDescription = stringResource(R.string.vagas_aplicadas),
-                    tint = if (pagerState.currentPage == 1) Color.White else Color.DarkGray
+                    tint = if (pagerState.currentPage == 1) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             label = {
@@ -89,7 +91,7 @@ fun MainPagerNavigator(
                 Icon(
                     imageVector = Icons.Outlined.Work,
                     contentDescription = stringResource(R.string.notificacoes),
-                    tint = if (pagerState.currentPage == 2) Color.White else Color.DarkGray
+                    tint = if (pagerState.currentPage == 2) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
             },
             label = {
