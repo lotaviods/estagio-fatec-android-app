@@ -47,6 +47,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.TextUnit
@@ -57,6 +58,7 @@ import androidx.core.text.util.LinkifyCompat
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.helper.TimeHelper.getElapsedTimeString
 import com.github.lotaviods.linkfatec.model.Post
 
 @Composable
@@ -68,8 +70,30 @@ fun JobPost(
 ) {
     Row {
         CompanyProfilePicture(post)
-        JobPostCard(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
+
+        Column(Modifier.padding(top = 10.dp)) {
+            Text(
+                post.companyName,
+                modifier = Modifier.padding(start = 5.dp),
+                color = Color.Black,
+                fontWeight = FontWeight.Bold,
+                fontSize = TextUnit(16.0F, TextUnitType.Sp)
+            )
+
+            Text(
+                post.role,
+                modifier = Modifier.padding(start = 10.dp),
+                color = Color.Gray
+            )
+
+            Text(
+                getElapsedTimeString(post.createdAt),
+                modifier = Modifier.padding(start = 10.dp),
+                color = Color.Gray
+            )
+        }
     }
+    JobPostCard(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
 }
 
 @Composable
@@ -84,9 +108,6 @@ private fun JobPostCard(
     Card(Modifier.padding(10.dp)) {
         Column(Modifier.padding(start = 10.dp, end = 10.dp)) {
             Row(modifier = Modifier.fillMaxWidth()) {
-                Text(post.companyName, modifier = Modifier.padding(start = 5.dp))
-                Text(" - ")
-                Text(post.role)
                 Spacer(Modifier.weight(1f))
 
                 Icon(
@@ -111,7 +132,7 @@ private fun JobPostCard(
 
             }
 
-            BodyText(modifier = Modifier.padding(start = 5.dp), text = post.description)
+            BodyText(modifier = Modifier.padding(start = 5.dp, top = 15.dp), text = post.description)
 
             if (post.promotionalImageUrl != null)
                 PromotionalImage(post.promotionalImageUrl)

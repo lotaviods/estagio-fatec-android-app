@@ -10,5 +10,6 @@ data class Post(
     var likeCount: Int,
     val liked: Boolean = false,
     var subscribedCount: Int,
-    var subscribed: Boolean = false
+    var subscribed: Boolean = false,
+    val createdAt: Long
 )
