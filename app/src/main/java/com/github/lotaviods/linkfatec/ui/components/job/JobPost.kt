@@ -31,8 +31,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CancelScheduleSend
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.MoreHoriz
-import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -318,7 +318,7 @@ private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: 
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         Icon(
-            imageVector = Icons.Outlined.ThumbUp,
+            imageVector = Icons.Filled.ThumbUp,
             contentDescription = "like",
             tint = if (selected) Color.Red else Color.LightGray,
             modifier = Modifier
