@@ -5,6 +5,7 @@ data class Post(
     val companyName: String,
     val companyProfilePicture: String,
     val role: String,
+    val title: String,
     val description: String,
     val promotionalImageUrl: String?,
     var likeCount: Int,

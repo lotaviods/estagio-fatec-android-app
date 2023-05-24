@@ -8,7 +8,6 @@ import java.util.concurrent.TimeUnit
 
 object TimeHelper {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getElapsedTimeString(timestamp: Long): String {
         val elapsed = System.currentTimeMillis() - timestamp
         val days = TimeUnit.MILLISECONDS.toDays(elapsed)

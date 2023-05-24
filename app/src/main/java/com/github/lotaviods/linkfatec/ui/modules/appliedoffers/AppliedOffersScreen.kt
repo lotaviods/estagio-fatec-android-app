@@ -6,11 +6,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
@@ -18,6 +16,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,16 +37,22 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.github.lotaviods.linkfatec.R
-import com.github.lotaviods.linkfatec.model.ErrorState
+import com.github.lotaviods.linkfatec.ui.components.job.JobPost
 import com.github.lotaviods.linkfatec.ui.components.nointernet.NoInternet
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.viewmodel.AppliedOffersViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
+    LaunchedEffect(Unit) {
+        appliedOffersViewModel.reloadOrLoadAppliedJob()
+    }
+
     val refreshScope = rememberCoroutineScope()
     val state = appliedOffersViewModel.uiState.collectAsState()
-    val isRefreshing = state.value is AppliedOffersViewModel.UiState.Loading
+    val isRefreshing =
+        (state.value is AppliedOffersViewModel.UiState.Loading
+                || state.value is AppliedOffersViewModel.UiState.Reloading)
 
     fun refresh() = refreshScope.launch {
         appliedOffersViewModel.loadAppliedJobs()
@@ -70,7 +75,16 @@ fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
 
             if (posts != null) {
                 items(posts.size) { pos ->
-                    Text(posts[pos].description)
+                    JobPost(
+                        post = posts[pos],
+                        onSubscribeJob = {},
+                        onLikeClicked = {
+                            appliedOffersViewModel.updateLikeCount(posts[pos], it)
+                        },
+                        onUnsubscribeJob = {
+                            appliedOffersViewModel.unsubscribeJobPost(posts[pos])
+                        },
+                    )
                 }
             }
         }

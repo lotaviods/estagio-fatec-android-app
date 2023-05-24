@@ -6,6 +6,10 @@ import com.github.lotaviods.linkfatec.data.repository.interfaces.JobOfferReposit
 import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.model.Post
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -14,6 +18,8 @@ class AppliedOffersViewModel(
     private val repository: JobOfferRepository,
     private val userRepository: UserRepository
 ) : ViewModel() {
+
+    private var likeCoroutineJob: Job? = null
 
     private val mUiState: MutableStateFlow<UiState> = MutableStateFlow(
         UiState.Loading
@@ -26,13 +32,16 @@ class AppliedOffersViewModel(
 
     fun loadAppliedJobs() = viewModelScope.launch {
         mUiState.emit(UiState.Loading)
+        getUpdatedAppliedJobs()
+    }
 
+    private suspend fun getUpdatedAppliedJobs() {
         val student = userRepository.getUser()
         val resp = repository.getAppliedJobOffers(student.id)
 
         resp.error?.let { error ->
             mUiState.emit(UiState.Error(error))
-            return@launch
+            return
         }
 
         val posts = resp.data?.map {
@@ -41,13 +50,56 @@ class AppliedOffersViewModel(
 
         if (posts?.isEmpty() == true) {
             mUiState.emit(UiState.LoadedEmpty)
-            return@launch
+            return
         }
 
         posts?.let { mUiState.emit(UiState.Loaded(it)) } ?: mUiState.emit(
             UiState.LoadedEmpty
         )
+    }
 
+    fun unsubscribeJobPost(post: Post) = viewModelScope.launch {
+        val posts = ((mUiState.value) as? UiState.Loaded)?.posts ?: return@launch
+
+        val resp = repository.unSubscribeJob(post.id, userRepository.getUser().id)
+
+        if (resp.hasError) {
+            return@launch
+        }
+
+        val list = mutableListOf<Post>().apply { addAll(posts) }
+
+        list.remove(post)
+
+        post.subscribed = false
+
+        if (list.isEmpty()) {
+            mUiState.emit(UiState.LoadedEmpty)
+            return@launch
+        }
+
+        mUiState.emit(UiState.Loaded(list))
+    }
+
+    fun updateLikeCount(post: Post, liked: Boolean) = viewModelScope.launch {
+        likeCoroutineJob?.cancel()
+
+        likeCoroutineJob = viewModelScope.launch {
+            delay(500)
+            val student = userRepository.getUser()
+            repository.likeJob(post.id, student.id, liked)
+        }
+    }
+
+    fun reloadOrLoadAppliedJob() = viewModelScope.launch {
+        if (mUiState.value is UiState.Loading) {
+            loadAppliedJobs()
+            return@launch
+        }
+        val posts = (mUiState.value as? UiState.Loaded)?.posts ?: listOf()
+
+        mUiState.emit(UiState.Reloading(posts = posts))
+        getUpdatedAppliedJobs()
     }
 
     sealed interface UiState {
@@ -56,7 +108,10 @@ class AppliedOffersViewModel(
 
         data class Error(val error: ErrorState) : UiState
 
-        data class Loaded(val posts: List<Post>) : UiState
+        open class Loaded(open val posts: List<Post>) : UiState
+
+        class Reloading(posts: List<Post>) : Loaded(posts)
+
         object LoadedEmpty : UiState
     }
 }

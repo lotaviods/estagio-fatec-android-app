@@ -19,7 +19,7 @@ class OpportunitiesViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private var likeJob: Job? = null
+    private var likeCoroutineJob: Job? = null
 
     private val mUiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
     val uiState: StateFlow<UiState> = mUiState
@@ -56,9 +56,9 @@ class OpportunitiesViewModel(
     }
 
     fun updateLikeCount(post: Post, liked: Boolean) = viewModelScope.launch {
-        likeJob?.cancel()
+        likeCoroutineJob?.cancel()
 
-        likeJob = viewModelScope.launch {
+        likeCoroutineJob = viewModelScope.launch {
             delay(500)
             val student = userRepository.getUser()
             repository.likeJob(post.id, student.id, liked)

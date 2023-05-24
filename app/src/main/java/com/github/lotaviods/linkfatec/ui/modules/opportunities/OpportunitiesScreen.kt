@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.model.ErrorState
-import com.github.lotaviods.linkfatec.ui.components.dialog.ShareDialog
+import com.github.lotaviods.linkfatec.ui.components.dialog.JobDialog
 import com.github.lotaviods.linkfatec.ui.components.job.JobPost
 import com.github.lotaviods.linkfatec.ui.components.nointernet.NoInternet
 import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
@@ -68,7 +68,7 @@ fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinVie
         if (state.value is UiState.ShowSubscribeModal) {
             val subscribeState = state.value as? UiState.ShowSubscribeModal ?: return
 
-            ShareDialog(
+            JobDialog(
                 onCancel = {
                     opportunitiesViewModel.closeModalSubscribeJob()
                 },

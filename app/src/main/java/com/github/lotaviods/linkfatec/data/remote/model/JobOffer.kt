@@ -30,7 +30,9 @@ data class JobOffer(
     @SerializedName("subscribed_by")
     val subscribedBy: List<Int>,
     @SerializedName("created_at")
-    val createdAt: String
+    val createdAt: String,
+    @SerializedName("title")
+    val title: String
 ) {
 
     fun toPost(user: User): Post {
@@ -39,13 +41,14 @@ data class JobOffer(
             this.companyName,
             companyProfilePicture ?: "",
             this.role ?: "",
+            this.title,
             this.description,
             this.promotionalImageUrl,
             this.likeCount,
             this.likedBy.contains(user.id),
             this.appliedStudentsCount,
             this.subscribedBy.contains(user.id),
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(createdAt).time
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(createdAt).time,
         )
     }
 

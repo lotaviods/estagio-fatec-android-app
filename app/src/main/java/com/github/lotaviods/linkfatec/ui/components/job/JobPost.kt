@@ -1,8 +1,5 @@
 package com.github.lotaviods.linkfatec.ui.components.job
 
-import android.text.method.LinkMovementMethod
-import android.text.util.Linkify
-import android.widget.TextView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -44,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,13 +49,12 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.text.util.LinkifyCompat
-import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.helper.TimeHelper.getElapsedTimeString
 import com.github.lotaviods.linkfatec.model.Post
+import com.github.lotaviods.linkfatec.ui.components.text.BodyCustomText
+import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 
 @Composable
 fun JobPost(
@@ -68,56 +63,36 @@ fun JobPost(
     onSubscribeJob: () -> Unit,
     onUnsubscribeJob: () -> Unit
 ) {
-    Row {
-        CompanyProfilePicture(post)
-
-        Column(Modifier.padding(top = 10.dp)) {
-            Text(
-                post.companyName,
-                modifier = Modifier.padding(start = 5.dp),
-                color = Color.Black,
-                fontWeight = FontWeight.Bold,
-                fontSize = TextUnit(16.0F, TextUnitType.Sp)
-            )
-
-            Text(
-                post.role,
-                modifier = Modifier.padding(start = 10.dp),
-                color = Color.Gray
-            )
-
-            Text(
-                getElapsedTimeString(post.createdAt),
-                modifier = Modifier.padding(start = 10.dp),
-                color = Color.Gray
-            )
-        }
-    }
-    JobPostCard(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
-}
-
-@Composable
-private fun JobPostCard(
-    post: Post,
-    onLikeClicked: (liked: Boolean) -> Unit,
-    onSubscribeJob: () -> Unit,
-    onUnsubscribeJob: () -> Unit
-) {
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
+    Card(modifier = Modifier
+        .padding(5.dp)) {
+        Column (Modifier.fillMaxWidth()){
+            Row{
+                CompanyProfilePicture(post)
+                Column(Modifier.padding(top = 10.dp)) {
+                    Text(
+                        post.companyName,
+                        modifier = Modifier.padding(start = 5.dp),
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = TextUnit(16.0F, TextUnitType.Sp)
+                    )
 
-    Card(Modifier.padding(10.dp)) {
-        Column(Modifier.padding(start = 10.dp, end = 10.dp)) {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                Spacer(Modifier.weight(1f))
+                    Text(
+                        post.role,
+                        modifier = Modifier.padding(start = 10.dp),
+                        color = Color.Gray
+                    )
 
-                Icon(
-                    imageVector = Icons.Outlined.MoreHoriz,
-                    contentDescription = "More options",
-                    Modifier.clickable {
-                        dropdownMenuExpanded = !dropdownMenuExpanded
-                    }
-                )
-                Box {
+                    Text(
+                        getElapsedTimeString(post.createdAt),
+                        modifier = Modifier.padding(start = 10.dp),
+                        color = Color.Gray
+                    )
+
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Box{
                     DropdownMenu(
                         expanded = dropdownMenuExpanded,
                         onDismissRequest = { dropdownMenuExpanded = false },
@@ -128,32 +103,37 @@ private fun JobPostCard(
                             Text("Send Feedback")
                         }
                     }
-                }
 
+                    Icon(
+                        imageVector = Icons.Outlined.MoreHoriz,
+                        contentDescription = "More options",
+                        Modifier.clickable {
+                            dropdownMenuExpanded = !dropdownMenuExpanded
+                        }
+                    )
+                }
             }
 
-            BodyText(modifier = Modifier.padding(start = 5.dp, top = 15.dp), text = post.description)
-
-            if (post.promotionalImageUrl != null)
-                PromotionalImage(post.promotionalImageUrl)
-
-            StatusPostSection(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
+            JobPostCard(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
         }
+
     }
 }
 
 @Composable
-private fun BodyText(modifier: Modifier = Modifier, text: String?) {
-    val context = LocalContext.current
-    val customLinkifyTextView = remember {
-        TextView(context)
-    }
+private fun JobPostCard(
+    post: Post,
+    onLikeClicked: (liked: Boolean) -> Unit,
+    onSubscribeJob: () -> Unit,
+    onUnsubscribeJob: () -> Unit
+) {
+    Column(Modifier.padding(start = 10.dp, end = 10.dp)) {
+        BodyCustomText(
+            modifier = Modifier.padding(start = 5.dp, top = 15.dp),
+            text = post.title
+        )
 
-    AndroidView(modifier = modifier, factory = { customLinkifyTextView }) { textView ->
-        textView.text = text ?: ""
-        textView.setTextColor(context.resources.getColor(R.color.black, context.theme))
-        LinkifyCompat.addLinks(textView, Linkify.WEB_URLS)
-        textView.movementMethod = LinkMovementMethod.getInstance()
+        StatusPostSection(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
     }
 }
 
@@ -174,6 +154,22 @@ fun CompanyProfilePicture(post: Post) {
 }
 
 @Composable
+private fun LikeCounter(currentLikeCount: Int) {
+    Image(
+        modifier = Modifier
+            .height(25.dp)
+            .width(25.dp),
+        painter = painterResource(id = R.drawable.like_icon),
+        contentDescription = null
+    )
+    Text(
+        currentLikeCount.toString(),
+        textAlign = TextAlign.Center,
+        fontSize = TextUnit(15F, TextUnitType.Sp)
+    )
+}
+
+@Composable
 fun StatusPostSection(
     post: Post,
     onLikeClicked: (liked: Boolean) -> Unit,
@@ -183,7 +179,7 @@ fun StatusPostSection(
     Column {
         var updatedLikeCount: Int by remember { mutableStateOf(post.likeCount) }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+        Row(modifier = Modifier.padding(top = 10.dp),horizontalArrangement = Arrangement.spacedBy(2.dp)) {
             LikeCounter(updatedLikeCount)
             Spacer(modifier = Modifier.weight(1f))
             AppliedCounter(post.subscribedCount)
@@ -234,7 +230,7 @@ private fun ApplyJobButton(callback: () -> Unit) {
                 end = 10.dp
             ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Red,
+            backgroundColor = ThemeColor.DarkRed,
             contentColor = Color.White
         ),
         elevation = ButtonDefaults.elevation(
@@ -274,7 +270,7 @@ private fun UnApplyJobButton(callback: () -> Unit) {
                 end = 10.dp
             ),
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.Red,
+            backgroundColor = ThemeColor.DarkRed,
             contentColor = Color.White
         ),
         elevation = ButtonDefaults.elevation(
@@ -305,24 +301,8 @@ private fun UnApplyJobButton(callback: () -> Unit) {
 }
 
 @Composable
-private fun LikeCounter(currentLikeCount: Int) {
-    Image(
-        modifier = Modifier
-            .height(25.dp)
-            .width(25.dp),
-        painter = painterResource(id = R.drawable.like_icon),
-        contentDescription = null
-    )
-    Text(
-        currentLikeCount.toString(),
-        textAlign = TextAlign.Center,
-        fontSize = TextUnit(15F, TextUnitType.Sp)
-    )
-}
-
-@Composable
 private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: Boolean) -> Unit) {
-    val ripple = rememberRipple(bounded = false, color = Color.Red)
+    val ripple = rememberRipple(bounded = false, color = ThemeColor.DarkRed)
     var selected: Boolean by remember { mutableStateOf(liked) }
 
     Row(
@@ -341,7 +321,7 @@ private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: 
         Icon(
             imageVector = Icons.Filled.ThumbUp,
             contentDescription = "like",
-            tint = if (selected) Color.Red else Color.LightGray,
+            tint = if (selected) ThemeColor.DarkRed else Color.LightGray,
             modifier = Modifier
                 .height(20.dp)
                 .width(20.dp)
@@ -353,21 +333,6 @@ private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: 
                 color = Color.LightGray,
                 fontSize = TextUnit(15F, TextUnitType.Sp)
             )
-        )
-    }
-}
-
-
-@Composable
-fun PromotionalImage(url: String, modifier: Modifier = Modifier) {
-    Box(modifier = modifier.padding(10.dp)) {
-        AsyncImage(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp),
-            model = url,
-            contentDescription = "promotional_job_image",
-            contentScale = ContentScale.Fit
         )
     }
 }

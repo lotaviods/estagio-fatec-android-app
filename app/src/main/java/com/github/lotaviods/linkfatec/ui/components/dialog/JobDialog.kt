@@ -2,23 +2,20 @@ package com.github.lotaviods.linkfatec.ui.components.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.BackdropScaffold
-import androidx.compose.material.BackdropValue
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,21 +24,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import coil.compose.AsyncImage
 import com.github.lotaviods.linkfatec.model.Post
 import com.github.lotaviods.linkfatec.ui.components.loading.LoadingText
+import com.github.lotaviods.linkfatec.ui.components.text.BodyCustomText
+import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 
 @Composable
-fun ShareDialog(
+fun JobDialog(
     onApply: () -> Unit,
     onCancel: () -> Unit,
     jobPost: Post?
 ) {
     var applying by remember { mutableStateOf(false) }
 
-    Surface {
+    Surface{
         Dialog(onDismissRequest = onCancel) {
             Card(
                 shape = MaterialTheme.shapes.medium,
@@ -57,7 +57,11 @@ fun ShareDialog(
                         style = MaterialTheme.typography.h6,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
-                    Text(text = "${jobPost?.description}", style = MaterialTheme.typography.body1)
+
+                    BodyCustomText(text = jobPost?.description, modifier = Modifier.height(300.dp))
+
+                    jobPost?.promotionalImageUrl?.let { PromotionalImage(it) }
+
                     Row(
                         horizontalArrangement = Arrangement.End,
                         modifier = Modifier.fillMaxWidth()
@@ -66,7 +70,7 @@ fun ShareDialog(
                             onClick = onCancel,
                             modifier = Modifier.clip(MaterialTheme.shapes.medium),
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Red,
+                                backgroundColor = ThemeColor.DarkRed,
                                 contentColor = Color.White
                             )
                         ) {
@@ -83,7 +87,7 @@ fun ShareDialog(
                             },
                             modifier = Modifier.clip(MaterialTheme.shapes.medium),
                             colors = ButtonDefaults.buttonColors(
-                                backgroundColor = Color.Red,
+                                backgroundColor = ThemeColor.DarkRed,
                                 contentColor = Color.White
                             )
                         ) {
@@ -98,5 +102,19 @@ fun ShareDialog(
             }
 
         }
+    }
+}
+
+@Composable
+fun PromotionalImage(url: String, modifier: Modifier = Modifier) {
+    Box(modifier = modifier.padding(10.dp)) {
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp),
+            model = url,
+            contentDescription = "promotional_job_image",
+            contentScale = ContentScale.Fit
+        )
     }
 }
