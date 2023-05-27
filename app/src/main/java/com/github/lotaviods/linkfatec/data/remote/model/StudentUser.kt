@@ -7,5 +7,7 @@ data class StudentUser(
     val profilePicture: String?,
     val name: String,
     @SerializedName("course_name")
-    val courseName: String?
+    val courseName: String?,
+    @SerializedName("course_id")
+    val courseId: Int = -1
 )

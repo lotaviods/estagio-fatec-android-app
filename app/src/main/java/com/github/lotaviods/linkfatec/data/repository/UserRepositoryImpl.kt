@@ -27,6 +27,7 @@ class UserRepositoryImpl(activity: Application, private val webClient: ProfileWe
 
         return Course(id, name)
     }
+
     override fun getUser(): User {
         val course = getCourse()
 
@@ -63,11 +64,11 @@ class UserRepositoryImpl(activity: Application, private val webClient: ProfileWe
         val newUser = user.copy(
             profilePicture = resp.data.profilePicture,
             name = resp.data.name,
-            course = resp.data.courseName?.let {
-                getCourse().copy(
-                    name = it
-                )
-            } ?: getCourse()
+            course =
+            getCourse().copy(
+                name = resp.data.courseName ?: "",
+                id = resp.data.courseId
+            )
         )
 
         saveUser(newUser)
