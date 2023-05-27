@@ -6,6 +6,7 @@ import com.github.lotaviods.linkfatec.data.repository.interfaces.JobOfferReposit
 import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.model.Post
+import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -120,7 +121,7 @@ class AppliedOffersViewModel(
         class Reloading(posts: List<Post>) : Loaded(posts)
 
         object LoadedEmpty : UiState
-
-        data class ShowSubscribeModal(val post: Post, val list: List<Post>) : UiState
+        class ShowSubscribeModal(val post: Post, val list: List<Post>) :
+            Loaded(list)
     }
 }
