@@ -16,8 +16,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -95,9 +99,13 @@ fun ProfileScreen(
     LaunchedEffect(viewModel.uiEvent) {
         viewModel.uiEvent.collectLatest {
             if (it is UiEvent.Error) {
-                Toast.makeText(context, "Ocorreu algum erro ao enviar as informações", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "Ocorreu algum erro ao enviar as informações",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            if(it is UiEvent.Success) {
+            if (it is UiEvent.Success) {
                 Toast.makeText(context, "Enviado com sucesso", Toast.LENGTH_SHORT).show()
             }
         }
@@ -149,11 +157,12 @@ fun ProfileScreen(
                         // TODO: Make request to update profile picture
                         var painter: AsyncImagePainter? = null
 
-                        if(user.profilePicture != null)
+                        if (user.profilePicture != null)
                             painter = rememberAsyncImagePainter(model = user.profilePicture)
 
                         Image(
-                            painter = painter ?: painterResource(id = R.drawable.profile_placeholder),
+                            painter = painter
+                                ?: painterResource(id = R.drawable.profile_placeholder),
                             contentDescription = "PROFILE",
                             modifier = Modifier
                                 .size(150.dp)
@@ -202,31 +211,43 @@ fun ProfileScreen(
                         )
 
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(
+                            space = 10.dp,
+                            alignment = Alignment.CenterHorizontally
+                        ),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
                         Spacer(modifier = Modifier.weight(1f))
 
                         Button(
+                            modifier = Modifier
+                                .widthIn(120.dp)
+                                .heightIn(30.dp),
                             onClick = {
                                 viewModel.logoutUser(user)
 
                                 activity?.recreate()
                             }, colors = ButtonDefaults.buttonColors(
-                                backgroundColor = ThemeColor.Red
+                                backgroundColor = ThemeColor.DarkRed
                             )
                         ) {
                             Text(text = "Deslogar", color = Color.White)
                         }
                         Button(
+                            modifier = Modifier
+                                .widthIn(120.dp)
+                                .heightIn(30.dp),
                             onClick = {
                                 resumeFilePicker.launch(arrayOf("application/pdf"))
                             }, colors = ButtonDefaults.buttonColors(
-                                backgroundColor = ThemeColor.Red
+                                backgroundColor = ThemeColor.DarkRed
                             )
                         ) {
                             Text(text = "Enviar currículo", color = Color.White)
 
                             Icon(
-                                modifier = Modifier.padding(start = 10.dp),
+                                modifier = Modifier.padding(start = 10.dp).size(16.dp),
                                 imageVector = Icons.Filled.Send,
                                 contentDescription = "Upload photo",
                                 tint = Color.White
