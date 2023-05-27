@@ -60,14 +60,20 @@ import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 fun JobPost(
     post: Post,
     onLikeClicked: (liked: Boolean) -> Unit,
-    onSubscribeJob: () -> Unit,
+    onOpenDetailsJob: () -> Unit,
     onUnsubscribeJob: () -> Unit
 ) {
     var dropdownMenuExpanded by remember { mutableStateOf(false) }
-    Card(modifier = Modifier
-        .padding(5.dp)) {
-        Column (Modifier.fillMaxWidth()){
-            Row{
+    Card(
+        modifier = Modifier
+            .padding(5.dp)
+            .clickable {
+                onOpenDetailsJob()
+            },
+    )
+    {
+        Column(Modifier.fillMaxWidth()) {
+            Row {
                 CompanyProfilePicture(post)
                 Column(Modifier.padding(top = 10.dp)) {
                     Text(
@@ -92,7 +98,7 @@ fun JobPost(
 
                 }
                 Spacer(modifier = Modifier.weight(1f))
-                Box{
+                Box {
                     DropdownMenu(
                         expanded = dropdownMenuExpanded,
                         onDismissRequest = { dropdownMenuExpanded = false },
@@ -114,7 +120,7 @@ fun JobPost(
                 }
             }
 
-            JobPostCard(post, onLikeClicked, onSubscribeJob, onUnsubscribeJob)
+            JobPostCard(post, onLikeClicked, onOpenDetailsJob, onUnsubscribeJob)
         }
 
     }
@@ -179,7 +185,10 @@ fun StatusPostSection(
     Column {
         var updatedLikeCount: Int by remember { mutableStateOf(post.likeCount) }
 
-        Row(modifier = Modifier.padding(top = 10.dp),horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+        Row(
+            modifier = Modifier.padding(top = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
             LikeCounter(updatedLikeCount)
             Spacer(modifier = Modifier.weight(1f))
             AppliedCounter(post.subscribedCount)

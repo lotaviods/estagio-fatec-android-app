@@ -11,7 +11,7 @@ data class JobOffer(
     val id: Int,
     val description: String,
     @SerializedName("job_experience")
-    val jobExperience: String,
+    val jobExperience: Int?,
     val role: String?,
     @SerializedName("company_name")
     val companyName: String,
@@ -32,7 +32,7 @@ data class JobOffer(
     @SerializedName("created_at")
     val createdAt: String,
     @SerializedName("title")
-    val title: String
+    val title: String?
 ) {
 
     fun toPost(user: User): Post {
@@ -41,13 +41,14 @@ data class JobOffer(
             this.companyName,
             companyProfilePicture ?: "",
             this.role ?: "",
-            this.title,
+            this.title ?: "",
             this.description,
             this.promotionalImageUrl,
             this.likeCount,
             this.likedBy.contains(user.id),
             this.appliedStudentsCount,
             this.subscribedBy.contains(user.id),
+            this.jobExperience ?: 0,
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(createdAt).time,
         )
     }

@@ -1,10 +1,12 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 
 package com.github.lotaviods.linkfatec.ui.modules.opportunities
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.*
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -34,7 +36,10 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinViewModel()) {
+fun OpportunitiesScreen(
+    opportunitiesViewModel: OpportunitiesViewModel = koinViewModel(),
+    pagerState: PagerState
+) {
     val refreshScope = rememberCoroutineScope()
     val state = opportunitiesViewModel.uiState.collectAsState()
     val isRefreshing = state.value is UiState.Loading
@@ -47,6 +52,7 @@ fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinVie
         opportunitiesViewModel.uiMessages.collect { value ->
             if (value is UiMessages.HasFinishedToAppliedToJob) {
                 opportunitiesViewModel.closeModalSubscribeJob()
+                pagerState.animateScrollToPage(1)
             }
         }
     }
@@ -89,7 +95,7 @@ fun OpportunitiesScreen(opportunitiesViewModel: OpportunitiesViewModel = koinVie
                         onLikeClicked = { liked ->
                             opportunitiesViewModel.updateLikeCount(posts[pos], liked)
                         },
-                        onSubscribeJob = {
+                        onOpenDetailsJob = {
                             opportunitiesViewModel.showModalSubscribeJob(posts, pos)
                         },
                         onUnsubscribeJob = {

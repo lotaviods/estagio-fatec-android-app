@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -32,6 +33,7 @@ import com.github.lotaviods.linkfatec.model.Post
 import com.github.lotaviods.linkfatec.ui.components.loading.LoadingText
 import com.github.lotaviods.linkfatec.ui.components.text.BodyCustomText
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
+import com.github.lotaviods.linkfatec.ui.util.getExperienceTextJob
 
 @Composable
 fun JobDialog(
@@ -41,24 +43,41 @@ fun JobDialog(
 ) {
     var applying by remember { mutableStateOf(false) }
 
-    Surface{
+    Surface {
         Dialog(onDismissRequest = onCancel) {
             Card(
-                shape = MaterialTheme.shapes.medium,
-                backgroundColor = Color.White
+                shape = RoundedCornerShape(12.dp),
+                elevation = 8.dp,
+                backgroundColor = Color.White,
+                modifier = Modifier.padding(16.dp)
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(16.dp)
+                        .padding(10.dp)
                         .background(Color.White)
                 ) {
                     Text(
-                        text = "Aplicar vaga para: ${jobPost?.role}",
-                        style = MaterialTheme.typography.h6,
+                        text = "Empresa: ${jobPost?.companyName}",
+                        style = MaterialTheme.typography.h5
+                    )
+
+                    Text(
+                        text = "Cargo: ${jobPost?.role}",
+                        style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
-                    BodyCustomText(text = jobPost?.description, modifier = Modifier.height(300.dp))
+                    Text(
+                        text = getExperienceTextJob(jobPost),
+                        style = MaterialTheme.typography.body1,
+                    )
+
+                    BodyCustomText(
+                        text = jobPost?.description,
+                        modifier = Modifier
+                            .height(250.dp)
+                            .padding(top = 10.dp)
+                    )
 
                     jobPost?.promotionalImageUrl?.let { PromotionalImage(it) }
 
@@ -80,23 +99,24 @@ fun JobDialog(
                             )
                         }
                         Spacer(modifier = Modifier.width(8.dp))
-                        Button(
-                            onClick = {
-                                applying = true
-                                onApply()
-                            },
-                            modifier = Modifier.clip(MaterialTheme.shapes.medium),
-                            colors = ButtonDefaults.buttonColors(
-                                backgroundColor = ThemeColor.DarkRed,
-                                contentColor = Color.White
-                            )
-                        ) {
-                            LoadingText(
-                                loading = applying,
-                                text = "Aplicar vaga",
-                                textStyle = MaterialTheme.typography.body1
-                            )
-                        }
+                        if (jobPost?.subscribed != true)
+                            Button(
+                                onClick = {
+                                    applying = true
+                                    onApply()
+                                },
+                                modifier = Modifier.clip(MaterialTheme.shapes.medium),
+                                colors = ButtonDefaults.buttonColors(
+                                    backgroundColor = ThemeColor.DarkRed,
+                                    contentColor = Color.White
+                                )
+                            ) {
+                                LoadingText(
+                                    loading = applying,
+                                    text = "Aplicar vaga",
+                                    textStyle = MaterialTheme.typography.body1
+                                )
+                            }
                     }
                 }
             }

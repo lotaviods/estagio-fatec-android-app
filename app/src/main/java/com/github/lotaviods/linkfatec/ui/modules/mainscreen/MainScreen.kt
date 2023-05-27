@@ -58,7 +58,7 @@ internal fun MainScreen(modifier: Modifier) {
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) {
-            MainPager(it)
+            MainPager(it, pagerState)
         }
     }
 }

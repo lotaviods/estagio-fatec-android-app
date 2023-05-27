@@ -6,11 +6,11 @@ import com.github.lotaviods.linkfatec.data.repository.interfaces.JobOfferReposit
 import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.model.Post
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -25,10 +25,6 @@ class AppliedOffersViewModel(
         UiState.Loading
     )
     val uiState: StateFlow<UiState> = mUiState
-
-    init {
-        loadAppliedJobs()
-    }
 
     fun loadAppliedJobs() = viewModelScope.launch {
         mUiState.emit(UiState.Loading)
@@ -102,6 +98,17 @@ class AppliedOffersViewModel(
         getUpdatedAppliedJobs()
     }
 
+    fun closeJobModal() = viewModelScope.launch {
+        val uiState = mUiState.value
+        if (uiState !is UiState.ShowSubscribeModal) return@launch
+
+        mUiState.emit(UiState.Loaded(uiState.list))
+    }
+
+    fun openJobModal(post: Post, list: List<Post>) = viewModelScope.launch {
+        mUiState.emit(UiState.ShowSubscribeModal(post = post, list = list))
+    }
+
     sealed interface UiState {
         object Loading : UiState
 
@@ -113,5 +120,7 @@ class AppliedOffersViewModel(
         class Reloading(posts: List<Post>) : Loaded(posts)
 
         object LoadedEmpty : UiState
+
+        data class ShowSubscribeModal(val post: Post, val list: List<Post>) : UiState
     }
 }

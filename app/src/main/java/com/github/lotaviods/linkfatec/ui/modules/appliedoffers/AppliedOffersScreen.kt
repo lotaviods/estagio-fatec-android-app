@@ -37,17 +37,15 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.ui.components.dialog.JobDialog
 import com.github.lotaviods.linkfatec.ui.components.job.JobPost
 import com.github.lotaviods.linkfatec.ui.components.nointernet.NoInternet
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.viewmodel.AppliedOffersViewModel
+import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
-    LaunchedEffect(Unit) {
-        appliedOffersViewModel.reloadOrLoadAppliedJob()
-    }
-
     val refreshScope = rememberCoroutineScope()
     val state = appliedOffersViewModel.uiState.collectAsState()
     val isRefreshing =
@@ -70,6 +68,19 @@ fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
             NoInternet()
         }
 
+        if (state.value is AppliedOffersViewModel.UiState.ShowSubscribeModal) {
+            val uiState = (state.value as? AppliedOffersViewModel.UiState.ShowSubscribeModal)
+            uiState?.let {
+                JobDialog(
+                    onCancel = {
+                        appliedOffersViewModel.closeJobModal()
+                    },
+                    jobPost = uiState.post,
+                    onApply = {}
+                )
+            }
+        }
+
         LazyColumn(Modifier.fillMaxSize()) {
             val posts = (state.value as? AppliedOffersViewModel.UiState.Loaded)?.posts
 
@@ -77,7 +88,9 @@ fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
                 items(posts.size) { pos ->
                     JobPost(
                         post = posts[pos],
-                        onSubscribeJob = {},
+                        onOpenDetailsJob = {
+                            appliedOffersViewModel.openJobModal(post = posts[pos], posts)
+                        },
                         onLikeClicked = {
                             appliedOffersViewModel.updateLikeCount(posts[pos], it)
                         },

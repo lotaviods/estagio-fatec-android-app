@@ -32,7 +32,7 @@ import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.ui.components.loading.LoadingText
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import com.github.lotaviods.linkfatec.ui.util.closeVirtualKeyboard
-import com.github.lotaviods.linkfatec.ui.util.showTrailingIconIfTextIsNotEmpty
+import com.github.lotaviods.linkfatec.ui.util.ShowTrailingIconIfTextIsNotEmpty
 
 @Composable
 fun LoginForm(
@@ -67,7 +67,7 @@ fun LoginForm(
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier.border(BorderStroke(25.dp, Color.Transparent)),
                 trailingIcon = {
-                    showTrailingIconIfTextIsNotEmpty(userTextInput, icon = {
+                    ShowTrailingIconIfTextIsNotEmpty(userTextInput, icon = {
                         Icon(
                             imageVector = Icons.Outlined.Close,
                             contentDescription = null
@@ -99,7 +99,7 @@ fun LoginForm(
                 ),
                 shape = RoundedCornerShape(8.dp),
                 trailingIcon = {
-                    showTrailingIconIfTextIsNotEmpty(
+                    ShowTrailingIconIfTextIsNotEmpty(
                         passwordTextInput,
                         { passwordVisible = !passwordVisible }) {
                         val icon = if (passwordVisible)

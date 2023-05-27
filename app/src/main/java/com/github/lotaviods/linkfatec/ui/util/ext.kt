@@ -7,10 +7,15 @@ import android.view.inputmethod.InputMethodManager
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
+import com.github.lotaviods.linkfatec.model.Post
 
 
 @Composable
-fun showTrailingIconIfTextIsNotEmpty(text: String, onClick: () -> Unit, icon: @Composable () -> Unit) {
+fun ShowTrailingIconIfTextIsNotEmpty(
+    text: String,
+    onClick: () -> Unit,
+    icon: @Composable () -> Unit
+) {
     if (text.isNotEmpty()) {
         IconButton(onClick = { onClick() }) {
             icon()
@@ -28,4 +33,13 @@ fun closeVirtualKeyboard(context: Context) {
         view.windowToken,
         InputMethodManager.HIDE_NOT_ALWAYS
     )
+}
+
+fun getExperienceTextJob(post: Post?): String {
+    return when (post?.experience) {
+        1 -> "Vaga para: trainne"
+        2 -> "Vaga para: junior"
+        3 -> "Vaga para: pleno"
+        else -> "Sem experiência exigida"
+    }
 }

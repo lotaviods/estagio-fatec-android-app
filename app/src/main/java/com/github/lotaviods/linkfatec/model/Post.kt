@@ -12,5 +12,6 @@ data class Post(
     val liked: Boolean = false,
     var subscribedCount: Int,
     var subscribed: Boolean = false,
+    var experience: Int = 0,
     val createdAt: Long
 )
