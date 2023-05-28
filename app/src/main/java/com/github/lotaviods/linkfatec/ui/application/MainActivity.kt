@@ -3,6 +3,7 @@ package com.github.lotaviods.linkfatec.ui.application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
@@ -23,6 +24,8 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -46,9 +49,11 @@ class MainActivity : ComponentActivity() {
                         ApplicationState.Loading -> {
                             "loading"
                         }
+
                         is ApplicationState.Logged -> {
                             "main"
                         }
+
                         ApplicationState.LoginState -> {
                             "login"
                         }

@@ -3,12 +3,13 @@
 
     <style name="Theme.LinkFatec" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowActionBar">false</item>
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 
 
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="postSplashScreenTheme">@style/Theme.LinkFatec</item>
         <item name="windowSplashScreenAnimationDuration">@integer/splash_duration</item>
-        <item name="windowSplashScreenAnimatedIcon">@android:drawable/sym_def_app_icon</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_cps</item>
     </style>
 </resources>
