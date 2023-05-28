@@ -19,6 +19,8 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.AppliedOffersScreen
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.viewmodel.AppliedOffersViewModel
+import com.github.lotaviods.linkfatec.ui.modules.notifications.AppNotificationScreen
+import com.github.lotaviods.linkfatec.ui.modules.notifications.viewmodel.AppNotificationsViewModel
 import com.github.lotaviods.linkfatec.ui.modules.opportunities.OpportunitiesScreen
 import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
 import kotlinx.coroutines.FlowPreview
@@ -36,6 +38,7 @@ fun MainPager(
 ) {
     val opportunitiesViewModel: OpportunitiesViewModel = koinViewModel()
     val appliedOffersViewModel: AppliedOffersViewModel = koinViewModel()
+    val appNotificationsViewModel: AppNotificationsViewModel = koinViewModel()
     var currentPage by remember { mutableStateOf(-1) }
 
     LaunchedEffect(Unit) {
@@ -54,9 +57,14 @@ fun MainPager(
 
                     1 -> {
                         if (currentPage == 1) return@collectLatest
-                        Log.e(TAG, "MainPager enters: $currentPage")
                         appliedOffersViewModel.reloadOrLoadAppliedJob()
                         currentPage = 1
+                    }
+
+                    2 -> {
+                        if (currentPage == 2) return@collectLatest
+                        appNotificationsViewModel.loadNotifications()
+                        currentPage = 2
                     }
                 }
             }
@@ -76,7 +84,7 @@ fun MainPager(
             }
 
             2 -> {
-                Text("Hello AppliedOffers")
+                AppNotificationScreen(appNotificationsViewModel)
             }
         }
     }

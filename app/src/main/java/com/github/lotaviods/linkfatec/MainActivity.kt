@@ -1,4 +1,4 @@
-package com.github.lotaviods.linkfatec.ui.application
+package com.github.lotaviods.linkfatec
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

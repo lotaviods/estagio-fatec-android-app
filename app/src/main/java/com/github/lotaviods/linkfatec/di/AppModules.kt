@@ -13,6 +13,7 @@ object AppModules {
             addAll(httpModules)
             addAll(opportunitiesModule)
             addAll(profileModules)
+            addAll(appNotificationModules)
         }
     }
 }
