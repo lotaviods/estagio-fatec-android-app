@@ -13,7 +13,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.github.lotaviods.linkfatec.ui.application.navigation.ApplicationNavHost
+import com.github.lotaviods.linkfatec.ui.navigation.ApplicationNavHost
 import com.github.lotaviods.linkfatec.ui.application.viewmodel.ApplicationViewModel
 import com.github.lotaviods.linkfatec.ui.application.viewmodel.ApplicationViewModel.ApplicationState
 import com.github.lotaviods.linkfatec.ui.theme.MainAppTheme
@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         is ApplicationState.Logged -> {
-                            "main"
+                            "just_logged"
                         }
 
                         ApplicationState.LoginState -> {
