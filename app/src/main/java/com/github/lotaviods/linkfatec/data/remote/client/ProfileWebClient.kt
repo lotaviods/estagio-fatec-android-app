@@ -3,7 +3,7 @@ package com.github.lotaviods.linkfatec.data.remote.client
 import com.github.lotaviods.linkfatec.data.remote.model.StudentUser
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse.*
-import com.github.lotaviods.linkfatec.data.retrofit.RetrofitClient
+import com.github.lotaviods.linkfatec.data.remote.retrofit.RetrofitClient
 import com.github.lotaviods.linkfatec.data.service.ProfileWebService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

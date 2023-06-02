@@ -1,11 +1,9 @@
 package com.github.lotaviods.linkfatec.data.remote.model
 
-import androidx.compose.ui.text.intl.Locale
 import com.github.lotaviods.linkfatec.model.Post
 import com.github.lotaviods.linkfatec.model.User
+import com.github.lotaviods.linkfatec.ui.util.toTimestamp
 import com.google.gson.annotations.SerializedName
-import java.text.DateFormat.getDateInstance
-import java.text.SimpleDateFormat
 
 data class JobOffer(
     val id: Int,
@@ -49,7 +47,7 @@ data class JobOffer(
             this.appliedStudentsCount,
             this.subscribedBy.contains(user.id),
             this.jobExperience ?: 0,
-            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(createdAt).time,
+            createdAt.toTimestamp(),
         )
     }
 

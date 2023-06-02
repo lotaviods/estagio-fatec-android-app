@@ -29,8 +29,8 @@ fun ApplicationNavHost(navController: NavHostController, startDestination: Strin
             val loginScreenViewModel: LoginScreenViewModel = koinViewModel()
 
             LoginScreen(loginScreenViewModel) {
-                navController.navigate("just_logged") {
-                    popUpTo("just_logged") { inclusive = true }
+                navController.navigate("main") {
+                    popUpTo("main") { inclusive = true }
                 }
             }
         }

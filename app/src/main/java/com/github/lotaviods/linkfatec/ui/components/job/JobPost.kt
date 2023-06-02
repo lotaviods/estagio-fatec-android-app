@@ -45,6 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -74,7 +75,7 @@ fun JobPost(
     {
         Column(Modifier.fillMaxWidth()) {
             Row {
-                CompanyProfilePicture(post)
+                CompanyProfilePicture(post.companyProfilePicture)
                 Column(Modifier.padding(top = 10.dp)) {
                     Text(
                         post.companyName,
@@ -144,8 +145,8 @@ private fun JobPostCard(
 }
 
 @Composable
-fun CompanyProfilePicture(post: Post) {
-    val painter = rememberAsyncImagePainter(model = post.companyProfilePicture)
+fun CompanyProfilePicture(imageUrl: String) {
+    val painter = rememberAsyncImagePainter(model = imageUrl)
 
     Image(
         painter = painter,
@@ -344,4 +345,30 @@ private fun LikeButton(modifier: Modifier, liked: Boolean, callback: (selected: 
             )
         )
     }
+}
+
+
+@Composable
+@Preview
+fun JobPostPreview() {
+    JobPost(
+        post = Post(
+            id = 1,
+            companyName = "Postman",
+            companyProfilePicture = "https://th.bing.com/th/id/R.e2b67864fc459d3eaf30269dedb9cfba?rik=p9tKu%2bGuhrZZTw&pid=ImgRaw&r=0",
+            role = "Dev",
+            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
+            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
+            promotionalImageUrl = null,
+            likeCount = 10,
+            liked = false,
+            subscribed = true,
+            subscribedCount = 1,
+            createdAt = 1L,
+            experience = 1
+        ),
+        onLikeClicked = { },
+        onOpenDetailsJob = {},
+        onUnsubscribeJob = {},
+    )
 }

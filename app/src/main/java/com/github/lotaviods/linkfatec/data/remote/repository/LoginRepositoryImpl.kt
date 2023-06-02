@@ -25,7 +25,8 @@ class LoginRepositoryImpl(
                         name = student?.name ?: "",
                         course = student?.course ?: Course(-1, ""),
                         ra = student?.ra ?: "",
-                        profilePicture = student?.profilePicture
+                        profilePicture = student?.profilePicture,
+                        accessToken = response.data?.token?.accessToken
                     )
                 )
             }

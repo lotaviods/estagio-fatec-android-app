@@ -1,4 +1,4 @@
-package com.github.lotaviods.linkfatec.data.remote.client
+package com.github.lotaviods.linkfatec.data.remote.model
 
 import com.github.lotaviods.linkfatec.model.Course
 import com.google.gson.annotations.SerializedName

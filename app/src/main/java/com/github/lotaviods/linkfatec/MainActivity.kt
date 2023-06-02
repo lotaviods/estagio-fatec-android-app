@@ -6,16 +6,20 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
-import androidx.compose.runtime.*
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.github.lotaviods.linkfatec.ui.navigation.ApplicationNavHost
 import com.github.lotaviods.linkfatec.ui.application.viewmodel.ApplicationViewModel
 import com.github.lotaviods.linkfatec.ui.application.viewmodel.ApplicationViewModel.ApplicationState
+import com.github.lotaviods.linkfatec.ui.navigation.ApplicationNavHost
 import com.github.lotaviods.linkfatec.ui.theme.MainAppTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -51,7 +55,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         is ApplicationState.Logged -> {
-                            "just_logged"
+                            "main"
                         }
 
                         ApplicationState.LoginState -> {

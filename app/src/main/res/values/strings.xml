@@ -19,5 +19,6 @@
     <string name="user_pref_resolver">USER_PREF</string>
     <string name="login_invalid">Login ou senha incorretos, tente novamente</string>
     <string name="no_opportunities_found">Nenhuma vaga encontrada até agora,\n tente procurar mais tarde</string>
+    <string name="no_notifications_found">Nenhuma notificação até agora</string>
     <string name="no_opportunities_applied">Nenhuma vaga aplicada,\n tente procurar algumas vagas disponíveis</string>
 </resources>

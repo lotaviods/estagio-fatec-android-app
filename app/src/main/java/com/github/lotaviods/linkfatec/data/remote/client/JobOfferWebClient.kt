@@ -2,7 +2,7 @@ package com.github.lotaviods.linkfatec.data.remote.client
 
 import com.github.lotaviods.linkfatec.data.remote.model.JobOffer
 import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse
-import com.github.lotaviods.linkfatec.data.retrofit.RetrofitClient
+import com.github.lotaviods.linkfatec.data.remote.retrofit.RetrofitClient
 import com.github.lotaviods.linkfatec.data.service.JobOfferService
 import okhttp3.ResponseBody
 import org.koin.core.component.KoinComponent

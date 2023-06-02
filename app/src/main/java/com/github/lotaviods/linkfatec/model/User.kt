@@ -7,12 +7,14 @@ data class User(
     val name: String,
     val course: Course,
     val ra: String,
-    val profilePicture: String? = null
+    val profilePicture: String? = null,
+    val accessToken: String? = null
 ) {
     companion object {
         fun String.fromJson(): User {
             return Gson().fromJson(this, User::class.java)
         }
+
         fun User.toJson(): String? {
             return Gson().toJson(this)
         }

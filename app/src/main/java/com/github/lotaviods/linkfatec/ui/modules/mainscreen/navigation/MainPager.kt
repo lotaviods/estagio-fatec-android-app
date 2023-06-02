@@ -2,13 +2,11 @@
 
 package com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation
 
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,7 +42,7 @@ fun MainPager(
     LaunchedEffect(Unit) {
         snapshotFlow { pagerState.currentPage }
             .distinctUntilChanged()
-            .debounce(500)
+            .debounce(200)
             .drop(1) // Skip the initial emission
             .collectLatest { offsetPage ->
                 when (offsetPage) {

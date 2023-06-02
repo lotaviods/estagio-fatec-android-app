@@ -32,11 +32,12 @@ class UserRepositoryImpl(activity: Application, private val webClient: ProfileWe
         val course = getCourse()
 
         return User(
-            sharedPref.getInt("user_id", -1),
-            sharedPref.getString("user_name", "null") ?: "null",
-            course,
-            sharedPref.getString("user_ra", "null") ?: "null",
-            profilePicture = sharedPref.getString("profile_picture", null)
+            id = sharedPref.getInt("user_id", -1),
+            name = sharedPref.getString("user_name", "null") ?: "null",
+            course = course,
+            ra = sharedPref.getString("user_ra", "null") ?: "null",
+            profilePicture = sharedPref.getString("profile_picture", null),
+            accessToken = sharedPref.getString("access_token", null)
         )
     }
 
@@ -49,7 +50,7 @@ class UserRepositoryImpl(activity: Application, private val webClient: ProfileWe
         editor.putString("course_name", user.course.name)
         editor.putString("user_ra", user.ra)
         editor.putString("profile_picture", user.profilePicture)
-
+        editor.putString("access_token", user.accessToken)
         editor.apply()
     }
 
@@ -64,8 +65,7 @@ class UserRepositoryImpl(activity: Application, private val webClient: ProfileWe
         val newUser = user.copy(
             profilePicture = resp.data.profilePicture,
             name = resp.data.name,
-            course =
-            getCourse().copy(
+            course = getCourse().copy(
                 name = resp.data.courseName ?: "",
                 id = resp.data.courseId
             )

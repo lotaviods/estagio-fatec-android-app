@@ -8,6 +8,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import com.github.lotaviods.linkfatec.model.Post
+import java.text.SimpleDateFormat
 
 
 @Composable
@@ -37,9 +38,19 @@ fun closeVirtualKeyboard(context: Context) {
 
 fun getExperienceTextJob(post: Post?): String {
     return when (post?.experience) {
-        1 -> "Vaga para: trainne"
-        2 -> "Vaga para: junior"
-        3 -> "Vaga para: pleno"
+        1 -> "Trainne"
+        2 -> "Junior"
+        3 -> "Pleno"
         else -> "Sem experiência exigida"
     }
+}
+
+fun String.toTimestamp(): Long {
+    try {
+        return SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").parse(this).time
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return 0L
 }

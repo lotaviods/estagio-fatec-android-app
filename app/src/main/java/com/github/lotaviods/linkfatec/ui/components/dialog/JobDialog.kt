@@ -23,13 +23,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
+import com.github.lotaviods.linkfatec.helper.TimeHelper
 import com.github.lotaviods.linkfatec.model.Post
 import com.github.lotaviods.linkfatec.ui.components.loading.LoadingText
 import com.github.lotaviods.linkfatec.ui.components.text.BodyCustomText
@@ -57,20 +61,31 @@ fun JobDialog(
                         .padding(10.dp)
                         .background(Color.White)
                 ) {
-                    Text(
-                        text = "Empresa: ${jobPost?.companyName}",
-                        style = MaterialTheme.typography.h5
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    ) {
+                        Text(
+                            text = "${jobPost?.companyName}",
+                            style = MaterialTheme.typography.h5
+                        )
+                        Text(text = "-")
+                        Text(
+                            text = getExperienceTextJob(jobPost),
+                            style = MaterialTheme.typography.body1,
+                            textAlign = TextAlign.Center
+                        )
+                    }
 
                     Text(
-                        text = "Cargo: ${jobPost?.role}",
+                        text = "${jobPost?.role}",
                         style = MaterialTheme.typography.body1,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
                     Text(
-                        text = getExperienceTextJob(jobPost),
-                        style = MaterialTheme.typography.body1,
+                        TimeHelper.getElapsedTimeString(jobPost?.createdAt ?: 1L),
+                        color = Color.Gray
                     )
 
                     BodyCustomText(
@@ -138,4 +153,27 @@ fun PromotionalImage(url: String, modifier: Modifier = Modifier) {
             contentScale = ContentScale.Fit
         )
     }
+}
+
+@Composable
+@Preview
+fun JobDialogPreview() {
+    JobDialog(
+        onApply = {}, onCancel = {},
+        jobPost = Post(
+            id = 1,
+            companyName = "Postman",
+            companyProfilePicture = "https://th.bing.com/th/id/R.e2b67864fc459d3eaf30269dedb9cfba?rik=p9tKu%2bGuhrZZTw&pid=ImgRaw&r=0",
+            role = "Dev",
+            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
+            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
+            promotionalImageUrl = null,
+            likeCount = 10,
+            liked = false,
+            subscribed = true,
+            subscribedCount = 1,
+            createdAt = 1L,
+            experience = 1
+        ),
+    )
 }
