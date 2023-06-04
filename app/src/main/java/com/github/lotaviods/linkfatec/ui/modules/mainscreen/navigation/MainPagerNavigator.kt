@@ -12,11 +12,11 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmark
-import androidx.compose.material.icons.outlined.Work
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
@@ -43,7 +43,7 @@ fun MainPagerNavigator(
             },
             icon = {
                 Icon(
-                    imageVector = Icons.Outlined.Work,
+                    painterResource(id = R.drawable.briefcase),
                     contentDescription = stringResource(R.string.vagas_de_estagio),
                     tint = if (pagerState.currentPage == 0) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
@@ -89,7 +89,7 @@ fun MainPagerNavigator(
             },
             icon = {
                 Icon(
-                    imageVector = Icons.Outlined.Work,
+                    painterResource(id = R.drawable.notification_bell),
                     contentDescription = stringResource(R.string.notificacoes),
                     tint = if (pagerState.currentPage == 2) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
                 )
