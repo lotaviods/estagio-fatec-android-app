@@ -20,7 +20,6 @@ abstract class BaseWebClient {
                 UnknownHostException::class.java.name -> {
                     ApplicationResponse(null, Status.CONNECTION_ERROR)
                 }
-
                 else -> {
                     ApplicationResponse(null, Status.UNDETERMINED)
                 }
@@ -34,7 +33,9 @@ abstract class BaseWebClient {
             BAD_REQUEST -> {
                 ApplicationResponse(status = Status.BAD_REQUEST)
             }
-
+            UNAUTHORIZED -> {
+                ApplicationResponse(status = Status.UNAUTHORIZED)
+            }
             else -> {
                 ApplicationResponse(null, Status.UNDETERMINED)
             }
@@ -43,6 +44,7 @@ abstract class BaseWebClient {
 
     companion object {
         val SUCCESS = 200..300
-        val BAD_REQUEST = 400
+        const val BAD_REQUEST = 400
+        const val UNAUTHORIZED = 401
     }
 }

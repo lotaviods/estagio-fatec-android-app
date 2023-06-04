@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.github.lotaviods.linkfatec.data.remote.model.JobNotificationModel
 import com.github.lotaviods.linkfatec.helper.TimeHelper
+import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import com.github.lotaviods.linkfatec.ui.util.toTimestamp
 
 @Composable
@@ -70,11 +71,9 @@ fun JobNotification(modifier: Modifier = Modifier, notification: JobNotification
                         .padding(end = 10.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(
-                            if (notification.approved) Color(
-                                red = 6,
-                                green = 162,
-                                blue = 131
-                            ) else Color.Gray
+                            if (notification.approved)
+                                ThemeColor.Red
+                            else Color.Gray
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {

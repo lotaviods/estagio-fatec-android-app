@@ -16,11 +16,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
@@ -55,7 +53,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.model.User
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel
-import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel.*
+import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel.UiEvent
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -196,7 +194,6 @@ fun ProfileScreen(
                             text = user.name,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .weight(1f)
                                 .padding(start = 5.dp)
                         )
                     }
@@ -206,7 +203,6 @@ fun ProfileScreen(
                             text = user.course.name,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .weight(1f)
                                 .padding(start = 5.dp)
                         )
 
@@ -247,7 +243,9 @@ fun ProfileScreen(
                             Text(text = "Enviar currículo", color = Color.White)
 
                             Icon(
-                                modifier = Modifier.padding(start = 10.dp).size(16.dp),
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                                    .size(16.dp),
                                 imageVector = Icons.Filled.Send,
                                 contentDescription = "Upload photo",
                                 tint = Color.White

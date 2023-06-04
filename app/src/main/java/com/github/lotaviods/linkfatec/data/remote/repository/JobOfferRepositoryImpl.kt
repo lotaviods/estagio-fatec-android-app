@@ -1,7 +1,7 @@
 package com.github.lotaviods.linkfatec.data.remote.repository
 
-import com.github.lotaviods.linkfatec.data.remote.model.JobOffer
 import com.github.lotaviods.linkfatec.data.remote.client.JobOfferWebClient
+import com.github.lotaviods.linkfatec.data.remote.model.JobOffer
 import com.github.lotaviods.linkfatec.data.repository.interfaces.JobOfferRepository
 import com.github.lotaviods.linkfatec.model.ErrorState
 import com.github.lotaviods.linkfatec.resource.AppResource
@@ -11,9 +11,9 @@ class JobOfferRepositoryImpl(
     private val webClient: JobOfferWebClient
 ) : JobOfferRepository, KoinComponent {
 
-    override suspend fun getAllAvailableJobOffers(courseId: Int): AppResource<List<JobOffer>> {
+    override suspend fun getAllAvailableJobOffers(): AppResource<List<JobOffer>> {
         try {
-            val response = webClient.getAllAvailableJobOffers(courseId)
+            val response = webClient.getAllAvailableJobOffers()
 
             if (response.isSuccessful) {
                 return AppResource(response.data, false)

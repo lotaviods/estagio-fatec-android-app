@@ -87,7 +87,7 @@ private fun LoginScreenContent(
                 .fillMaxWidth()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.fatec_garca_logo),
+                painter = painterResource(id = R.drawable.horizontal_logogov_cps),
                 contentDescription = "CPS_LOGO",
                 modifier = Modifier
                     .fillMaxSize()
