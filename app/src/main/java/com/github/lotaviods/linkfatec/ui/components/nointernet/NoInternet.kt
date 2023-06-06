@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +44,7 @@ fun NoInternet(modifier: Modifier = Modifier) {
             )
         }
         Text(
-            text = "Aconteceu algum problema \n tente novamente mais tarde",
+            text = stringResource(R.string.internet_problem_description),
             textAlign = TextAlign.Center,
             style = TextStyle.Default.copy(
                 fontSize = TextUnit(

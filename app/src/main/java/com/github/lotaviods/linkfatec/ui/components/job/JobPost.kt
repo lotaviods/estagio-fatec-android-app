@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -228,7 +229,7 @@ fun StatusPostSection(
 
 @Composable
 fun AppliedCounter(subscribedCount: Int) {
-    Text(text = "$subscribedCount aplicaçoes")
+    Text(text = stringResource(R.string.applications_counted, subscribedCount))
 }
 
 @Composable
@@ -261,7 +262,7 @@ private fun ApplyJobButton(callback: () -> Unit) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = ("Aplicar vaga"),
+            text = stringResource(id = R.string.apply_offer),
             style = TextStyle.Default.copy(
                 color = Color.White,
                 fontSize = TextUnit(16F, TextUnitType.Sp)
@@ -301,7 +302,7 @@ private fun UnApplyJobButton(callback: () -> Unit) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
-            text = ("Desistir da vaga"),
+            text = (stringResource(R.string.give_up_offer)),
             style = TextStyle.Default.copy(
                 color = Color.White,
                 fontSize = TextUnit(16F, TextUnitType.Sp)

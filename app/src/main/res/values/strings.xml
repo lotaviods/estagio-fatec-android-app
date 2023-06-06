@@ -23,4 +23,10 @@
     <string name="no_opportunities_applied">Nenhuma vaga aplicada,\n tente procurar algumas vagas disponíveis</string>
     <string name="approved">Aprovado</string>
     <string name="rejected">Rejeitado</string>
+    <string name="cancel">Cancelar</string>
+    <string name="apply_offer">Aplicar vaga</string>
+    <string name="give_up_offer">Desistir da vaga</string>
+    <string name="applications_counted">%1$s aplicaçoes</string>
+    <string name="login">Login</string>
+    <string name="internet_problem_description">Aconteceu algum problema \n tente novamente mais tarde</string>
 </resources>
