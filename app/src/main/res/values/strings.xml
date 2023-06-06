@@ -21,4 +21,6 @@
     <string name="no_opportunities_found">Nenhuma vaga encontrada até agora,\n tente procurar mais tarde</string>
     <string name="no_notifications_found">Nenhuma notificação até agora</string>
     <string name="no_opportunities_applied">Nenhuma vaga aplicada,\n tente procurar algumas vagas disponíveis</string>
+    <string name="approved">Aprovado</string>
+    <string name="rejected">Rejeitado</string>
 </resources>

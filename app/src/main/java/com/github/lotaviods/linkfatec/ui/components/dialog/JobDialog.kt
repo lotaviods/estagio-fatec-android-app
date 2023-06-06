@@ -162,9 +162,9 @@ fun JobDialogPreview() {
         onApply = {}, onCancel = {},
         jobPost = Post(
             id = 1,
-            companyName = "Postman",
-            companyProfilePicture = "https://th.bing.com/th/id/R.e2b67864fc459d3eaf30269dedb9cfba?rik=p9tKu%2bGuhrZZTw&pid=ImgRaw&r=0",
-            role = "Dev",
+            companyName = "Company",
+            companyProfilePicture = "",
+            role = "Developer",
             title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
             description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
             promotionalImageUrl = null,

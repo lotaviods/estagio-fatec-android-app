@@ -10,7 +10,7 @@ data class JobNotificationModel(
     @SerializedName("job_title")
     val jobTitle: String,
     @SerializedName("status_changed_date")
-    val statusChangedDate: String,
+    val statusChangedDate: String?,
     val approved: Boolean,
     @SerializedName("company_profile_picture")
     val companyProfilePicture: String? = "",

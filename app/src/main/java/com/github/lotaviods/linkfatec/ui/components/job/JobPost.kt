@@ -354,8 +354,8 @@ fun JobPostPreview() {
     JobPost(
         post = Post(
             id = 1,
-            companyName = "Postman",
-            companyProfilePicture = "https://th.bing.com/th/id/R.e2b67864fc459d3eaf30269dedb9cfba?rik=p9tKu%2bGuhrZZTw&pid=ImgRaw&r=0",
+            companyName = "Company",
+            companyProfilePicture = "",
             role = "Dev",
             title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
             description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
@@ -367,7 +367,32 @@ fun JobPostPreview() {
             createdAt = 1L,
             experience = 1
         ),
-        onLikeClicked = { },
+        onLikeClicked = {},
+        onOpenDetailsJob = {},
+        onUnsubscribeJob = {},
+    )
+}
+
+@Composable
+@Preview
+fun JobPostPreview2() {
+    JobPost(
+        post = Post(
+            id = 1,
+            companyName = "Company",
+            companyProfilePicture = "",
+            role = "Dev",
+            title = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
+            description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris ultrices a erat et venenatis. Donec et nisl felis. Mauris sit amet lacus porttitor, vestibulum lacus sit amet, porta metus.",
+            promotionalImageUrl = null,
+            likeCount = 10,
+            liked = true,
+            subscribed = false,
+            subscribedCount = 1,
+            createdAt = 1L,
+            experience = 1
+        ),
+        onLikeClicked = {},
         onOpenDetailsJob = {},
         onUnsubscribeJob = {},
     )

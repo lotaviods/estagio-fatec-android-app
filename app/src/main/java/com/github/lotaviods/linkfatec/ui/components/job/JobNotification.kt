@@ -15,11 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.data.remote.model.JobNotificationModel
 import com.github.lotaviods.linkfatec.helper.TimeHelper
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
@@ -56,14 +58,18 @@ fun JobNotification(modifier: Modifier = Modifier, notification: JobNotification
                     )
 
                     Text(
-                        TimeHelper.getElapsedTimeString(notification.statusChangedDate.toTimestamp()),
+                        TimeHelper.getElapsedTimeString(
+                            notification.statusChangedDate?.toTimestamp() ?: 0L
+                        ),
                         modifier = Modifier.padding(start = 5.dp),
                         fontSize = TextUnit(12.0F, TextUnitType.Sp),
                         color = Color.Gray
                     )
 
                 }
-                val status = if (notification.approved) "Aprovado" else "Rejeitado"
+                val status =
+                    if (notification.approved)
+                        stringResource(R.string.approved) else stringResource(R.string.rejected)
                 Spacer(modifier = Modifier.weight(1F))
                 Box(
                     modifier = Modifier
@@ -94,12 +100,12 @@ fun JobNotificationPreviewApproved() {
     JobNotification(
         modifier = Modifier.background(Color.White),
         notification = JobNotificationModel(
-            companyName = "Postman",
-            jobTitle = "Analista de suporte",
+            companyName = "Company",
+            jobTitle = "Support analyst",
             statusChangedDate = "2023-06-02T07:36:24+00:00",
             approved = true,
             companyProfilePicture = "",
-            location = "São Paulo, Brasil"
+            location = "São Paulo, Brazil"
         ),
     )
 }
@@ -110,12 +116,12 @@ fun JobNotificationPreviewRejected() {
     JobNotification(
         modifier = Modifier.background(Color.White),
         notification = JobNotificationModel(
-            companyName = "Postman",
-            jobTitle = "Analista de suporte",
+            companyName = "Company",
+            jobTitle = "Support analyst",
             statusChangedDate = "2023-06-02T07:36:24+00:00",
             approved = false,
             companyProfilePicture = "",
-            location = "São Paulo, Brasil"
+            location = "São Paulo, Brazil"
         ),
     )
 }

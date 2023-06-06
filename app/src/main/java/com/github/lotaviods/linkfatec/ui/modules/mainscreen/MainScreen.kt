@@ -19,10 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.github.lotaviods.linkfatec.R
 import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPager
@@ -132,3 +134,8 @@ private fun ProfilePictureButton(modifier: Modifier) {
     }
 }
 
+@Preview
+@Composable
+fun MainScreenPreview() {
+    MainScreen(navController = rememberNavController())
+}
