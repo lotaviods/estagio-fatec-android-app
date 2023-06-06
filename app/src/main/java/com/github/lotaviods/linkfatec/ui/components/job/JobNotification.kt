@@ -77,9 +77,11 @@ fun JobNotification(modifier: Modifier = Modifier, notification: JobNotification
                         .padding(end = 10.dp)
                         .clip(RoundedCornerShape(16.dp))
                         .background(
-                            if (notification.approved)
-                                ThemeColor.Red
-                            else Color.Gray
+                            if (notification.approved) Color(
+                                red = 6,
+                                green = 162,
+                                blue = 131
+                            ) else Color.Gray
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
