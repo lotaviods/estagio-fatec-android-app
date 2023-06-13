@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,27 +21,34 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalContentColor
 import androidx.compose.material.Scaffold
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.outlined.ExitToApp
+import androidx.compose.material.icons.outlined.MoreHoriz
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -114,6 +122,26 @@ fun ProfileScreen(
         TopAppBar(
             title = { Text(text = stringResource(R.string.my_profile), color = Color.White) },
             backgroundColor = ThemeColor.Red,
+            actions = {
+                Icon(
+                    tint = Color.White,
+                    modifier = Modifier.padding(end = 5.dp).selectable(
+                        selected = false,
+                        indication = rememberRipple(
+                            bounded = false,
+                            color = LocalContentColor.current
+                        ),
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {
+                            viewModel.logoutUser(user)
+
+                            (context as? Activity)?.recreate()
+                        },
+                    ),
+                    painter = rememberVectorPainter(image = Icons.Outlined.ExitToApp),
+                    contentDescription = "Exit app"
+                )
+            },
             navigationIcon = {
                 if (navController.previousBackStackEntry != null) {
                     IconButton(onClick = { navController.navigateUp() }) {
@@ -128,7 +156,6 @@ fun ProfileScreen(
         )
     }) {
         Box(modifier = Modifier.padding(it)) {
-            val activity = (LocalContext.current as? Activity)
             Card(
                 modifier
                     .fillMaxWidth()
@@ -216,20 +243,6 @@ fun ProfileScreen(
                     ) {
                         Spacer(modifier = Modifier.weight(1f))
 
-                        Button(
-                            modifier = Modifier
-                                .widthIn(120.dp)
-                                .heightIn(30.dp),
-                            onClick = {
-                                viewModel.logoutUser(user)
-
-                                activity?.recreate()
-                            }, colors = ButtonDefaults.buttonColors(
-                                backgroundColor = ThemeColor.DarkRed
-                            )
-                        ) {
-                            Text(text = "Deslogar", color = Color.White)
-                        }
                         Button(
                             modifier = Modifier
                                 .widthIn(120.dp)

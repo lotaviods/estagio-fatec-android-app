@@ -45,7 +45,7 @@ import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.Opportu
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
+fun AppliedOffersScreen(modifier: Modifier, appliedOffersViewModel: AppliedOffersViewModel) {
     val refreshScope = rememberCoroutineScope()
     val state = appliedOffersViewModel.uiState.collectAsState()
     val isRefreshing =
@@ -58,7 +58,7 @@ fun AppliedOffersScreen(appliedOffersViewModel: AppliedOffersViewModel) {
 
     val refreshState = rememberPullRefreshState(isRefreshing, ::refresh)
 
-    Box(Modifier.pullRefresh(refreshState)) {
+    Box(modifier.pullRefresh(refreshState)) {
 
         if (state.value is AppliedOffersViewModel.UiState.LoadedEmpty) {
             NoSubscribedJobs()

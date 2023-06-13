@@ -45,7 +45,7 @@ fun MainPagerNavigator(
                 Icon(
                     painterResource(id = R.drawable.briefcase),
                     contentDescription = stringResource(R.string.vagas_de_estagio),
-                    tint = if (pagerState.currentPage == 0) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    tint = if (pagerState.currentPage == 0) Color.White else Color(0xFF141414)
                 )
             },
             label = {
@@ -68,7 +68,7 @@ fun MainPagerNavigator(
                 Icon(
                     imageVector = Icons.Outlined.Bookmark,
                     contentDescription = stringResource(R.string.vagas_aplicadas),
-                    tint = if (pagerState.currentPage == 1) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    tint = if (pagerState.currentPage == 1) Color.White else Color(0xFF141414)
                 )
             },
             label = {
@@ -91,7 +91,7 @@ fun MainPagerNavigator(
                 Icon(
                     painterResource(id = R.drawable.notification_bell),
                     contentDescription = stringResource(R.string.notificacoes),
-                    tint = if (pagerState.currentPage == 2) Color.White else LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+                    tint = if (pagerState.currentPage == 2) Color.White else Color(0xFF141414)
                 )
             },
             label = {

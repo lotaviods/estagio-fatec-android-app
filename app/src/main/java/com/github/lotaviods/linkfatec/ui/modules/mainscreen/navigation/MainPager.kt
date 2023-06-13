@@ -3,6 +3,7 @@
 package com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.AppliedOffersScreen
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.viewmodel.AppliedOffersViewModel
 import com.github.lotaviods.linkfatec.ui.modules.notifications.AppNotificationScreen
@@ -74,15 +76,25 @@ fun MainPager(
     ) {
         when (page) {
             0 -> {
-                OpportunitiesScreen(opportunitiesViewModel, pagerState)
+                OpportunitiesScreen(
+                    Modifier.background(Color(0xFFE6E6E6)),
+                    opportunitiesViewModel,
+                    pagerState
+                )
             }
 
             1 -> {
-                AppliedOffersScreen(appliedOffersViewModel)
+                AppliedOffersScreen(
+                    Modifier.background(Color(0xFFE6E6E6)),
+                    appliedOffersViewModel
+                )
             }
 
             2 -> {
-                AppNotificationScreen(appNotificationsViewModel)
+                AppNotificationScreen(
+                    Modifier.background(Color(0xFFE6E6E6)),
+                    appNotificationsViewModel
+                )
             }
         }
     }

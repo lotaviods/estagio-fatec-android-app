@@ -33,7 +33,7 @@ fun JobNotification(modifier: Modifier = Modifier, notification: JobNotification
         Column {
             Row(Modifier.fillMaxWidth()) {
                 CompanyProfilePicture(notification.companyProfilePicture ?: "")
-                Column(Modifier.padding(top = 10.dp)) {
+                Column(Modifier.padding(top = 10.dp, bottom = 10.dp)) {
                     Text(
                         notification.companyName,
                         modifier = Modifier.padding(start = 5.dp),
@@ -78,9 +78,9 @@ fun JobNotification(modifier: Modifier = Modifier, notification: JobNotification
                         .clip(RoundedCornerShape(16.dp))
                         .background(
                             if (notification.approved) Color(
-                                red = 6,
-                                green = 162,
-                                blue = 131
+                                red = 58,
+                                green = 207,
+                                blue = 31
                             ) else Color.Gray
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)

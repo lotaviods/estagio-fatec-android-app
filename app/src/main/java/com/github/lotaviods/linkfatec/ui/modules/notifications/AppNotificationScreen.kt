@@ -43,7 +43,7 @@ import com.github.lotaviods.linkfatec.ui.modules.notifications.viewmodel.AppNoti
 import kotlinx.coroutines.launch
 
 @Composable
-fun AppNotificationScreen(viewModel: AppNotificationsViewModel) {
+fun AppNotificationScreen(modifier: Modifier, viewModel: AppNotificationsViewModel) {
     val refreshScope = rememberCoroutineScope()
     val state = viewModel.uiState.collectAsState()
     val isRefreshing =
@@ -55,7 +55,7 @@ fun AppNotificationScreen(viewModel: AppNotificationsViewModel) {
 
     val refreshState = rememberPullRefreshState(isRefreshing, ::refresh)
 
-    Box(Modifier.pullRefresh(refreshState)) {
+    Box(modifier.pullRefresh(refreshState)) {
 
         if (state.value is UiState.LoadedEmpty) {
             NoNotificationFound()

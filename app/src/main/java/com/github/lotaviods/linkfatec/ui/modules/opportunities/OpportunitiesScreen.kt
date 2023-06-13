@@ -4,6 +4,7 @@ package com.github.lotaviods.linkfatec.ui.modules.opportunities
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.PagerState
@@ -37,6 +38,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OpportunitiesScreen(
+    modifier: Modifier,
     opportunitiesViewModel: OpportunitiesViewModel = koinViewModel(),
     pagerState: PagerState
 ) {
@@ -65,7 +67,7 @@ fun OpportunitiesScreen(
 
     val refreshState = rememberPullRefreshState(isRefreshing, ::refresh)
 
-    Box(Modifier.pullRefresh(refreshState)) {
+    Box(modifier.pullRefresh(refreshState)) {
 
         if (state.value is UiState.NoPostsFound) {
             NoPostsFound()
