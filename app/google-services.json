@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "561502638149",
+    "project_id": "link-fatec",
+    "storage_bucket": "link-fatec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561502638149:android:f07024bd2b65a81742d32c",
+        "android_client_info": {
+          "package_name": "com.github.lotaviods.linkfatec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561502638149-1r0u748tj46pmlsim7023t6trqdu1fpf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLxTBYcMJibgpkLjyLlxfBGMenHH1sesI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561502638149-1r0u748tj46pmlsim7023t6trqdu1fpf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

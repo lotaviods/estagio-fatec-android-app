@@ -18,7 +18,9 @@ import androidx.compose.ui.unit.ExperimentalUnitApi
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.github.lotaviods.linkfatec.MainActivity
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.app.Application
 import com.github.lotaviods.linkfatec.ui.components.login.LoginForm
 import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel
 import com.github.lotaviods.linkfatec.ui.login.viewmodel.LoginScreenViewModel.LoginUiState
@@ -76,6 +78,7 @@ private fun LoginScreenContent(
 
     if (state.value is LoginUiState.Success) {
         LaunchedEffect(state) {
+            ((context as MainActivity).application as? Application)?.registerPush()
             onSuccess()
         }
     }

@@ -11,9 +11,9 @@ class JobOfferRepositoryImpl(
     private val webClient: JobOfferWebClient
 ) : JobOfferRepository, KoinComponent {
 
-    override suspend fun getAllAvailableJobOffers(): AppResource<List<JobOffer>> {
+    override suspend fun getAllAvailableJobOffers(courseId: Int): AppResource<List<JobOffer>> {
         try {
-            val response = webClient.getAllAvailableJobOffers()
+            val response = webClient.getAllAvailableJobOffers(courseId)
 
             if (response.isSuccessful) {
                 return AppResource(response.data, false)

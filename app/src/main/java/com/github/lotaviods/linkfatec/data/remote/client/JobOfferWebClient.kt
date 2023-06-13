@@ -13,8 +13,8 @@ class JobOfferWebClient : BaseWebClient(), KoinComponent {
         get<RetrofitClient>().getService()
     }
 
-    suspend fun getAllAvailableJobOffers(): ApplicationResponse<List<JobOffer>> {
-        return execute { service.getAllAvailableJobs() }
+    suspend fun getAllAvailableJobOffers(courseId: Int): ApplicationResponse<List<JobOffer>> {
+        return execute { service.getAllAvailableJobs(courseId) }
     }
 
     suspend fun likeJob(

@@ -35,7 +35,7 @@ class OpportunitiesViewModel(
         mUiState.emit(UiState.Loading)
 
         val student = userRepository.getUser()
-        val resp = repository.getAllAvailableJobOffers()
+        val resp = repository.getAllAvailableJobOffers(student.course.id)
 
         resp.error?.let { error ->
             mUiState.emit(UiState.Error(error))
