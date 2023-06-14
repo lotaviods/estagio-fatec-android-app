@@ -16,7 +16,6 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,11 +36,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.ui.components.dialog.AskUserQuestionDialog
 import com.github.lotaviods.linkfatec.ui.components.dialog.JobDialog
 import com.github.lotaviods.linkfatec.ui.components.job.JobPost
 import com.github.lotaviods.linkfatec.ui.components.nointernet.NoInternet
 import com.github.lotaviods.linkfatec.ui.modules.appliedoffers.viewmodel.AppliedOffersViewModel
-import com.github.lotaviods.linkfatec.ui.modules.opportunities.viewmodel.OpportunitiesViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,12 +72,29 @@ fun AppliedOffersScreen(modifier: Modifier, appliedOffersViewModel: AppliedOffer
             uiState?.let {
                 JobDialog(
                     onCancel = {
-                        appliedOffersViewModel.closeJobModal()
+                        appliedOffersViewModel.closeJobDetailsModal()
                     },
                     jobPost = uiState.post,
                     onApply = {}
                 )
             }
+        }
+        if (state.value is AppliedOffersViewModel.UiState.ShowUserCancelApplication) {
+            AskUserQuestionDialog(
+                onAccepted = {
+                    (state.value as? AppliedOffersViewModel.UiState.ShowUserCancelApplication)?.post?.let {
+                        appliedOffersViewModel.unsubscribeJobPost(
+                            post = it
+                        )
+                        appliedOffersViewModel.closeUserUnsubscribeConfirmation()
+                    }
+                },
+                onCanceled = { appliedOffersViewModel.closeUserUnsubscribeConfirmation() },
+                title = "Desistir da vaga",
+                content = "Tem certeza que deseja desistir da vaga?",
+                acceptedString = "Desistir",
+                canceledString = "Cancelar"
+            )
         }
 
         LazyColumn(Modifier.fillMaxSize()) {
@@ -89,13 +105,16 @@ fun AppliedOffersScreen(modifier: Modifier, appliedOffersViewModel: AppliedOffer
                     JobPost(
                         post = posts[pos],
                         onOpenDetailsJob = {
-                            appliedOffersViewModel.openJobModal(post = posts[pos], posts)
+                            appliedOffersViewModel.openJobDetailsModal(post = posts[pos], posts)
                         },
                         onLikeClicked = {
                             appliedOffersViewModel.updateLikeCount(posts[pos], it)
                         },
                         onUnsubscribeJob = {
-                            appliedOffersViewModel.unsubscribeJobPost(posts[pos])
+                            appliedOffersViewModel.showUserUnsubscribeConfirmation(
+                                posts[pos],
+                                posts
+                            )
                         },
                     )
                 }

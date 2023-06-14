@@ -63,26 +63,25 @@ fun JobDialog(
                         .padding(10.dp)
                         .background(Color.White)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    Column(
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.spacedBy(2.dp)
                     ) {
                         Text(
                             text = "${jobPost?.companyName}",
-                            style = MaterialTheme.typography.h5
+                            style = MaterialTheme.typography.subtitle1
                         )
-                        Text(text = "-")
                         Text(
                             text = getExperienceTextJob(jobPost),
-                            style = MaterialTheme.typography.body1,
-                            textAlign = TextAlign.Center
+                            style = MaterialTheme.typography.subtitle2,
+                            textAlign = TextAlign.Start
                         )
                     }
 
                     Text(
                         text = "${jobPost?.role}",
-                        style = MaterialTheme.typography.body1,
-                        modifier = Modifier.padding(bottom = 8.dp)
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.padding(bottom = 8.dp, top = 8.dp)
                     )
 
                     Text(
@@ -175,7 +174,7 @@ fun JobDialogPreview() {
             subscribed = true,
             subscribedCount = 1,
             createdAt = 1L,
-            experience = 1
+            experience = 4
         ),
     )
 }

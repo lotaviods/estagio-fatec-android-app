@@ -96,15 +96,26 @@ class AppliedOffersViewModel(
         getUpdatedAppliedJobs()
     }
 
-    fun closeJobModal() = viewModelScope.launch {
+    fun closeJobDetailsModal() = viewModelScope.launch {
         val uiState = mUiState.value
         if (uiState !is UiState.ShowSubscribeModal) return@launch
 
         mUiState.emit(UiState.Loaded(uiState.list))
     }
 
-    fun openJobModal(post: Post, list: List<Post>) = viewModelScope.launch {
+    fun openJobDetailsModal(post: Post, list: List<Post>) = viewModelScope.launch {
         mUiState.emit(UiState.ShowSubscribeModal(post = post, list = list))
+    }
+
+    fun showUserUnsubscribeConfirmation(post: Post, list: List<Post>) = viewModelScope.launch {
+        mUiState.emit(UiState.ShowUserCancelApplication(post = post, list = list))
+    }
+
+    fun closeUserUnsubscribeConfirmation() = viewModelScope.launch {
+        val uiState = mUiState.value
+        if (uiState !is UiState.ShowUserCancelApplication) return@launch
+
+        mUiState.emit(UiState.Loaded(uiState.list))
     }
 
     sealed interface UiState {
@@ -119,6 +130,9 @@ class AppliedOffersViewModel(
 
         object LoadedEmpty : UiState
         class ShowSubscribeModal(val post: Post, val list: List<Post>) :
+            Loaded(list)
+
+        class ShowUserCancelApplication(val post: Post, val list: List<Post>) :
             Loaded(list)
     }
 }
