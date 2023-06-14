@@ -4,15 +4,26 @@ package com.github.lotaviods.linkfatec.ui.modules.opportunities
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.PagerState
-import androidx.compose.material.*
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,16 +72,16 @@ fun OpportunitiesScreen(
 
     val error = (state.value as? UiState.Error)?.error
 
-    if (error is ErrorState.InternetConnection) {
-        NoInternet()
-    }
-
     val refreshState = rememberPullRefreshState(isRefreshing, ::refresh)
 
     Box(modifier.pullRefresh(refreshState)) {
 
         if (state.value is UiState.NoPostsFound) {
             NoPostsFound()
+        }
+
+        if (error is ErrorState.InternetConnection) {
+            NoInternet()
         }
 
         if (state.value is UiState.ShowSubscribeModal) {
