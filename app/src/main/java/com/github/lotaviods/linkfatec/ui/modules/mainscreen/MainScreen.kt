@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -26,6 +27,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.app.Application
 import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
 import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPager
 import com.github.lotaviods.linkfatec.ui.modules.mainscreen.navigation.MainPagerNavigator
@@ -35,6 +37,7 @@ import org.koin.androidx.compose.inject
 @Composable
 fun MainScreen(navController: NavHostController) {
     val userRepository: UserRepository by inject()
+    (LocalContext.current.applicationContext as Application).registerPush()
 
     Scaffold(
         topBar = {

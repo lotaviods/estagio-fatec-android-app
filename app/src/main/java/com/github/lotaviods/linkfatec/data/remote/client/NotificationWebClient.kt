@@ -9,7 +9,7 @@ import org.koin.core.component.get
 
 class NotificationWebClient : BaseWebClient(), KoinComponent {
     private val service: NotificationService by lazy {
-        get<RetrofitClient>().getService()
+        get<RetrofitClient>().getServiceAuth()
     }
 
     suspend fun getAllNotifications(): ApplicationResponse<List<Notification>> {

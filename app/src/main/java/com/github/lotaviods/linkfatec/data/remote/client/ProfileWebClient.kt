@@ -14,7 +14,7 @@ import org.koin.core.component.get
 
 class ProfileWebClient : BaseWebClient(), KoinComponent {
     private val service: ProfileWebService by lazy {
-        get<RetrofitClient>().getService()
+        get<RetrofitClient>().getServiceAuth()
     }
 
     suspend fun sendProfileResume(studentId: Int, pdfBytes: ByteArray?): ApplicationResponse<ResponseBody> {

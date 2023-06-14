@@ -34,8 +34,6 @@ class Application : Application(), KoinComponent {
                 AppModules.modules
             )
         }
-
-        registerPush()
     }
     @SuppressLint("HardwareIds")
     fun registerPush() {

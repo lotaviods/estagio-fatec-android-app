@@ -9,7 +9,7 @@ import org.koin.core.component.get
 
 class DeviceWebClient: BaseWebClient(), KoinComponent {
     private val service: DeviceService by lazy {
-        get<RetrofitClient>().getService()
+        get<RetrofitClient>().getServiceAuth()
     }
 
     suspend fun registerDevice(uuid: String, description: String, token: String): ApplicationResponse<ResponseBody> {

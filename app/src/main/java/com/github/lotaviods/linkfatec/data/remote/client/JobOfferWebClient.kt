@@ -10,7 +10,7 @@ import org.koin.core.component.get
 
 class JobOfferWebClient : BaseWebClient(), KoinComponent {
     private val service: JobOfferService by lazy {
-        get<RetrofitClient>().getService()
+        get<RetrofitClient>().getServiceAuth()
     }
 
     suspend fun getAllAvailableJobOffers(courseId: Int): ApplicationResponse<List<JobOffer>> {

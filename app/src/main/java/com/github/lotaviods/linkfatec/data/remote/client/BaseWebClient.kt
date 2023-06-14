@@ -5,7 +5,9 @@ import com.github.lotaviods.linkfatec.data.remote.response.ApplicationResponse.S
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
+
 abstract class BaseWebClient {
+
     suspend fun <T> execute(call: suspend () -> retrofit2.Response<T>): ApplicationResponse<T> {
         val response: retrofit2.Response<T>?
 
@@ -20,6 +22,7 @@ abstract class BaseWebClient {
                 UnknownHostException::class.java.name -> {
                     ApplicationResponse(null, Status.CONNECTION_ERROR)
                 }
+
                 else -> {
                     ApplicationResponse(null, Status.UNDETERMINED)
                 }
@@ -33,9 +36,11 @@ abstract class BaseWebClient {
             BAD_REQUEST -> {
                 ApplicationResponse(status = Status.BAD_REQUEST)
             }
+
             UNAUTHORIZED -> {
                 ApplicationResponse(status = Status.UNAUTHORIZED)
             }
+
             else -> {
                 ApplicationResponse(null, Status.UNDETERMINED)
             }

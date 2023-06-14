@@ -25,6 +25,29 @@ class RetrofitClient(tokenInterceptor: TokenInterceptor) {
                     .readTimeout(2, TimeUnit.MINUTES)
                     .writeTimeout(2, TimeUnit.MINUTES)
                     .connectTimeout(2, TimeUnit.MINUTES)
+                    .build()
+            )
+            .baseUrl(API_URL)
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder()
+                        .registerTypeAdapter(Notification::class.java, NotificationSerializer())
+                        .create(),
+                )
+            )
+            .build();
+
+    val clientAuth: Retrofit =
+        Retrofit.Builder()
+            .client(
+                OkHttpClient.Builder()
+                    .addInterceptor(
+                        HttpLoggingInterceptor()
+                            .setLevel(HttpLoggingInterceptor.Level.BODY)
+                    )
+                    .readTimeout(2, TimeUnit.MINUTES)
+                    .writeTimeout(2, TimeUnit.MINUTES)
+                    .connectTimeout(2, TimeUnit.MINUTES)
                     .addInterceptor(tokenInterceptor)
                     .build()
             )
@@ -37,6 +60,11 @@ class RetrofitClient(tokenInterceptor: TokenInterceptor) {
                 )
             )
             .build();
+
+
+    inline fun <reified T> getServiceAuth(): T {
+        return clientAuth.create()
+    }
 
     inline fun <reified T> getService(): T {
         return client.create()
