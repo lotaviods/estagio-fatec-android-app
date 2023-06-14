@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -36,7 +37,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.outlined.ExitToApp
-import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -54,12 +54,18 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import com.github.lotaviods.linkfatec.R
+import com.github.lotaviods.linkfatec.data.repository.interfaces.ProfileRepository
+import com.github.lotaviods.linkfatec.data.repository.interfaces.UserRepository
+import com.github.lotaviods.linkfatec.model.Course
 import com.github.lotaviods.linkfatec.model.User
+import com.github.lotaviods.linkfatec.resource.AppResource
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel
 import com.github.lotaviods.linkfatec.ui.modules.profile.viewmodel.ProfileViewModel.UiEvent
 import com.github.lotaviods.linkfatec.ui.theme.ThemeColor
@@ -125,19 +131,21 @@ fun ProfileScreen(
             actions = {
                 Icon(
                     tint = Color.White,
-                    modifier = Modifier.padding(end = 5.dp).selectable(
-                        selected = false,
-                        indication = rememberRipple(
-                            bounded = false,
-                            color = LocalContentColor.current
-                        ),
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = {
-                            viewModel.logoutUser(user)
+                    modifier = Modifier
+                        .padding(end = 5.dp)
+                        .selectable(
+                            selected = false,
+                            indication = rememberRipple(
+                                bounded = false,
+                                color = LocalContentColor.current
+                            ),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {
+                                viewModel.logoutUser(user)
 
-                            (context as? Activity)?.recreate()
-                        },
-                    ),
+                                (context as? Activity)?.recreate()
+                            },
+                        ),
                     painter = rememberVectorPainter(image = Icons.Outlined.ExitToApp),
                     contentDescription = "Exit app"
                 )
@@ -155,16 +163,18 @@ fun ProfileScreen(
             },
         )
     }) {
-        Box(modifier = Modifier.padding(it)) {
+        Box(
+            modifier = modifier
+                .padding(it)
+                .fillMaxWidth(),
+        ) {
             Card(
-                modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
+                Modifier
+                    .fillMaxWidth(),
                 elevation = 5.dp
             ) {
                 Column(
                     Modifier
-                        .fillMaxWidth()
                         .padding(5.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
@@ -215,25 +225,28 @@ fun ProfileScreen(
                             )
                         }
                     }
-                    Row {
-                        Text(text = "Nome:")
-                        Text(
-                            text = user.name,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(start = 5.dp)
-                        )
-                    }
-                    Row {
-                        Text(text = "Turma:")
-                        Text(
-                            text = user.course.name,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(start = 5.dp)
-                        )
+                    Column(
+                        Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = user.name,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(start = 5.dp)
+                            )
+                        }
 
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = user.course.name,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(start = 5.dp)
+                            )
+                        }
                     }
+
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(
                             space = 10.dp,
@@ -302,3 +315,47 @@ suspend fun sendProfileResume(context: Context, uri: Uri, viewModel: ProfileView
 }
 
 private const val TAG = "ProfileScreen"
+
+
+@Composable
+@Preview
+fun ProfileScreenPreview() {
+    ProfileScreen(
+        Modifier
+            .background(Color(0xFFE6E6E6))
+            .fillMaxSize(),
+        navController = rememberNavController(),
+        viewModel = ProfileViewModel(object : UserRepository {
+            override fun getUser(): User {
+                return User(1, "a", Course(1, "adfasd"), "asdfas")
+            }
+
+            override fun saveUser(user: User) {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun getUpdatedUserInformation(): User {
+                TODO("Not yet implemented")
+            }
+
+            override fun deleteUser(user: User) {
+                TODO("Not yet implemented")
+            }
+        }, object :
+            ProfileRepository {
+            override suspend fun sendProfileResume(
+                studentId: Int,
+                pdfBytes: ByteArray?
+            ): AppResource<Any> {
+                TODO("Not yet implemented")
+            }
+
+            override suspend fun sendProfilePicture(
+                studentId: Int,
+                bytes: ByteArray?
+            ): AppResource<Any> {
+                TODO("Not yet implemented")
+            }
+        })
+    )
+}
