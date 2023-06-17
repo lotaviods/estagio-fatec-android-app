@@ -48,10 +48,9 @@ fun AskUserQuestionDialog(
                     Text(text = content, style = MaterialTheme.typography.body2)
 
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.End),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(10.dp)
+                            .fillMaxWidth().padding(top = 10.dp)
                     ) {
                         if (canceledString?.isNotEmpty() == true)
                             Button(
