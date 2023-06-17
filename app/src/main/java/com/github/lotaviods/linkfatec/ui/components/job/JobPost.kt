@@ -99,27 +99,6 @@ fun JobPost(
                     )
 
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                Box {
-                    DropdownMenu(
-                        expanded = dropdownMenuExpanded,
-                        onDismissRequest = { dropdownMenuExpanded = false },
-                        modifier = Modifier.align(Alignment.TopEnd),
-                        offset = DpOffset(x = 0.dp, y = (30).dp)
-                    ) {
-                        DropdownMenuItem(onClick = { /* Handle send feedback! */ }) {
-                            Text("Send Feedback")
-                        }
-                    }
-
-                    Icon(
-                        imageVector = Icons.Outlined.MoreHoriz,
-                        contentDescription = "More options",
-                        Modifier.clickable {
-                            dropdownMenuExpanded = !dropdownMenuExpanded
-                        }
-                    )
-                }
             }
 
             JobPostCard(post, onLikeClicked, onOpenDetailsJob, onUnsubscribeJob)
