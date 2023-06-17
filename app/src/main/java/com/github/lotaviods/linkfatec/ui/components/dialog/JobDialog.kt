@@ -99,8 +99,10 @@ fun JobDialog(
                     jobPost?.promotionalImageUrl?.let { PromotionalImage(it) }
 
                     Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 10.dp)
                     ) {
                         Button(
                             onClick = onCancel,
@@ -171,7 +173,7 @@ fun JobDialogPreview() {
             promotionalImageUrl = null,
             likeCount = 10,
             liked = false,
-            subscribed = true,
+            subscribed = false,
             subscribedCount = 1,
             createdAt = 1L,
             experience = 4
