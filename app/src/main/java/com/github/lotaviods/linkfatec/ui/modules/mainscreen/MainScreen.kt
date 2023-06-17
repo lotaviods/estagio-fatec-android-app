@@ -2,6 +2,9 @@
 
 package com.github.lotaviods.linkfatec.ui.modules.mainscreen
 
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -11,6 +14,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +40,21 @@ import org.koin.androidx.compose.inject
 
 @Composable
 fun MainScreen(navController: NavHostController) {
+    val application = LocalContext.current.applicationContext as Application
     val userRepository: UserRepository by inject()
-    (LocalContext.current.applicationContext as Application).registerPush()
+
+    val postNotificationResult =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                application.registerPush()
+            }
+        }
+    SideEffect {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            postNotificationResult.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 
     Scaffold(
         topBar = {

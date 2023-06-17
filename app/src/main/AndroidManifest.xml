@@ -8,6 +8,8 @@
         android:name="android.permission.POST_NOTIFICATIONS"
         tools:node="remove" />
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <application
         android:name=".app.Application"
         android:allowBackup="true"
@@ -41,7 +43,7 @@
         See README(https://goo.gl/l4GJaQ) for more. -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher_foreground" />
+            android:resource="@drawable/ic_notification" />
 
     </application>
 

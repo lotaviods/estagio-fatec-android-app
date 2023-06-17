@@ -2,6 +2,10 @@ package com.github.lotaviods.linkfatec.app
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.util.Log
@@ -34,7 +38,20 @@ class Application : Application(), KoinComponent {
                 AppModules.modules
             )
         }
+        setUpNotificationChannels()
     }
+
+    private fun setUpNotificationChannels() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channels = listOf(
+                NotificationChannel("default", "default", NotificationManager.IMPORTANCE_HIGH)
+            )
+            val manager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            manager.createNotificationChannels(channels)
+        }
+    }
+
     @SuppressLint("HardwareIds")
     fun registerPush() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
