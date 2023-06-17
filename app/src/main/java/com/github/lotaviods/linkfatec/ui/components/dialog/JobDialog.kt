@@ -117,8 +117,10 @@ fun JobDialog(
                                 color = MaterialTheme.colors.onPrimary
                             )
                         }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        if (jobPost?.subscribed != true)
+
+                        if (jobPost?.subscribed != true) {
+                            Spacer(modifier = Modifier.width(8.dp))
+
                             Button(
                                 onClick = {
                                     applying = true
@@ -136,6 +138,8 @@ fun JobDialog(
                                     textStyle = MaterialTheme.typography.body1
                                 )
                             }
+                        }
+
                     }
                 }
             }
