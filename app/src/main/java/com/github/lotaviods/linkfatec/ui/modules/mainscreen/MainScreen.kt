@@ -53,7 +53,10 @@ fun MainScreen(navController: NavHostController) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             postNotificationResult.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            application.registerPush()
         }
+
     }
 
     Scaffold(
